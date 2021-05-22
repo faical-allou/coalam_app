@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:coalam_app/screens/HomeScreen.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
@@ -7,7 +9,32 @@ import 'package:coalam_app/screens/RecipesListScreen.dart';
 import 'package:coalam_app/GlobalParamaters.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      // Initialize the model in the builder. That way, Provider
+      // can own Counter's lifecycle, making sure to call `dispose`
+      // when not needed anymore.
+      create: (context) => GlobalState(),
+      child: MyApp(),
+    ),
+  );
+}
+class GlobalState with ChangeNotifier {
+
+  List<Map<String, String>> recipes = [
+    {'title': 'Classic Burger', 'cook': 'Faical Allou'},
+    {'title': 'BBQ Burger', 'cook': 'also Faical Allou'},
+    {'title': 'Couscous', 'cook': "Faical's Mom"},
+    {'title': 'Tajine', 'cook': "Faical's Mom"},
+  ];
+
+  void increment() {
+    notifyListeners();
+  }
+  void addRecipe(){
+    recipes.add({'title': 'Added Manually', 'cook': "pressing a button"});
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
