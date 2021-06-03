@@ -4,10 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:coalam_app/screens/HomeScreen.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
-
-
-import 'package:coalam_app/GlobalParameters.dart';
-import 'package:coalam_app/models.dart';
+import 'package:coalam_app/screens/RecipeEditScreen.dart';
 
 void main() {
   runApp(
@@ -38,6 +35,10 @@ class MyApp extends StatelessWidget {
         if (uri.pathSegments.length == 1 &&
             uri.pathSegments.first == 'list') {
           return MaterialPageRoute(builder: (context) => RecipesListScreen());
+        }
+        if (uri.pathSegments.length == 1 &&
+            uri.pathSegments.first == 'create') {
+          return MaterialPageRoute(builder: (context) => RecipeEditScreen());
         }
 
         return MaterialPageRoute(builder: (context) => UnknownScreen());

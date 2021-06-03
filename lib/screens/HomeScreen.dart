@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
 
-import 'package:coalam_app/GlobalParameters.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
