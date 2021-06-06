@@ -5,6 +5,7 @@ import 'package:coalam_app/screens/HomeScreen.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
 import 'package:coalam_app/screens/RecipeEditScreen.dart';
+import 'package:coalam_app/screens/AccountEditScreen.dart';
 
 void main() {
   runApp(
@@ -40,6 +41,10 @@ class MyApp extends StatelessWidget {
             uri.pathSegments.first == 'create') {
           return MaterialPageRoute(builder: (context) => RecipeEditScreen());
         }
+        if (uri.pathSegments.length == 1 &&
+            uri.pathSegments.first == 'account') {
+          return MaterialPageRoute(builder: (context) => AccountEditScreen());
+        }
 
         return MaterialPageRoute(builder: (context) => UnknownScreen());
       },
@@ -62,6 +67,8 @@ class UnknownScreen extends StatelessWidget {
 class GlobalState with ChangeNotifier {
 
   bool isLoggedIn = false;
+  int chefId = 1;
+  String chefName = '';
 
   void logOut() {
     isLoggedIn = false;
@@ -73,6 +80,10 @@ class GlobalState with ChangeNotifier {
   }
   void toggleLogIn() {
     isLoggedIn = !isLoggedIn;
+    notifyListeners();
+  }
+  void setChefId(int id){
+    chefId = id;
     notifyListeners();
   }
 }

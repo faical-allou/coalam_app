@@ -73,6 +73,7 @@ class RecipeDetailsScreen extends StatelessWidget {
                       'and those tools: \n' +
                           snapshot.data.details['tools']
                     ),
+
                     Center(
                       child:
                     Padding(

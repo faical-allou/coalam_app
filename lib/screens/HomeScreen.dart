@@ -34,7 +34,8 @@ class HomeScreen extends StatelessWidget {
                   var status = context.read<GlobalState>();
                 return TextButton(
                   child:
-                      Text("Toggle current status: " + status.isLoggedIn.toString()),
+                      Text("Are logged-in?: " + status.isLoggedIn.toString() +
+                          "\n and your id is: " +status.chefId.toString() ),
                   onPressed: () {
                     status.toggleLogIn();
                   },

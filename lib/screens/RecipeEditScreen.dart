@@ -2,7 +2,6 @@ import 'package:coalam_app/models.dart';
 import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import 'dart:io';
 
 
@@ -15,15 +14,20 @@ class RecipeEditScreen extends StatefulWidget {
 }
 class RecipeEditScreenState extends State<RecipeEditScreen> {
 
-  final recipeInputName = TextEditingController();
-  final recipeInputDescription = TextEditingController();
-  final recipeInputIngredients = TextEditingController();
-  final recipeInputTools = TextEditingController();
-  var chefId = 1;
+  var recipeInputName = TextEditingController();
+  var recipeInputDescription = TextEditingController();
+  var recipeInputIngredients = TextEditingController();
+  var recipeInputTools = TextEditingController();
+  var chefId = 0;
   var recipeId = 0;
 
   Image image;
   File imageFile;
+
+  var initialTextRecipeName = "";
+  var initialTextRecipeDescription = "";
+  var initialTextIngredients = "";
+  var initialTextTools = "";
 
   final picker = ImagePicker();
 
@@ -55,23 +59,22 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    var initialTextRecipeName = 'input a name';
-    var initialTextRecipeDescription = 'description';
-    var initialTextIngredients = 'Ingredients needed (10 max, 1 per row)';
-    var initialTextTools = 'Tools Required (10 max, 1 per row)';
-
-
-    if ( !["", null].contains(widget.recipe) ) {
+    if ( widget.recipe.id != 0  ) {
       initialTextRecipeName = widget.recipe.details['recipeName'];
       initialTextRecipeDescription = widget.recipe.details['description'];
       initialTextIngredients = widget.recipe.details['ingredients'];
       initialTextTools = widget.recipe.details['tools'];
-      recipeId = widget.recipe.details['recipeId'];
-      chefId = widget.recipe.details['chefId'];
+
+      recipeInputName = TextEditingController(text:initialTextRecipeName);
+      recipeInputDescription = TextEditingController(text: initialTextRecipeDescription);
+      recipeInputIngredients = TextEditingController(text: initialTextIngredients);
+      recipeInputTools = TextEditingController(text: initialTextTools);
+
       var initialImage = widget.imageInput;
+      recipeId = widget.recipe.details['recipeId'];
       image = initialImage;
     }
+    chefId = widget.recipe.chefId;
 
     return Scaffold(
       appBar: AppBar(),
@@ -118,24 +121,112 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
             ]),
           )),
         ),
-        CoalamTextField(
-            recipeInputName, Text(initialTextRecipeName).data, 90, 1, 30),
-        CoalamTextField(
-            recipeInputDescription, Text(initialTextRecipeDescription).data, 160, 4, 200),
-        CoalamTextField(recipeInputIngredients,
-            Text(initialTextIngredients).data, 120, 10, 200),
-        CoalamTextField(recipeInputTools,
-            Text(initialTextTools).data, 120, 10, 200),
-        ElevatedButton(
-          child: Text("Create Recipe"),
+            CoalamTextInputField(
+                initialTextRecipeName,
+                recipeInputName,
+                Text('input a name').data, 90, 1, 30),
+            CoalamTextInputField(
+                initialTextRecipeDescription,
+                recipeInputDescription,
+                Text('description').data, 160, 4, 200),
+            CoalamTextInputField(
+                initialTextIngredients,
+                recipeInputIngredients,
+                Text('ingredients').data, 120, 10, 200),
+            CoalamTextInputField(
+                initialTextTools,
+                recipeInputTools,
+                Text("tools").data, 120, 10, 200),
+
+            ElevatedButton(
+          child: Text("Send"),
           onPressed: () {
-            print(recipeId);
-            asyncFileUpload(recipeId, recipeInputName.text, recipeInputDescription.text,
-                recipeInputIngredients.text, recipeInputTools.text, chefId, imageFile );
+
+            asyncRecipeUpload(
+                recipeId,
+                recipeInputName.text,
+                recipeInputDescription.text,
+                recipeInputIngredients.text,
+                recipeInputTools.text,
+                chefId,
+                imageFile );
+            showAlertDialog(context);
           },
-        )
+        ),
+            ElevatedButton(
+              child: Text("Delete"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,),
+              onPressed: () {
+                showAlertDialogDelete(context, recipeId);
+              },
+            ),
+
       ])),
     );
   }
 }
 
+showAlertDialog(BuildContext context) {
+
+  Widget continueButton = TextButton(
+    child: Text("Continue"),
+    onPressed:  () {
+      Navigator.pushReplacementNamed(context, '/list');
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thank you for your submission"),
+    content: Text("Now you're cooking"),
+    actions: [
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialogDelete(BuildContext context, recipeId) {
+
+  Widget continueButton = TextButton(
+    child: Text("yes, delete"),
+    onPressed:  () {
+      deleteRecipe(recipeId);
+      Navigator.pushReplacementNamed(context, '/list');
+    },
+  );
+
+  Widget cancelButton = TextButton(
+    child: Text("cancel"),
+    onPressed:  () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Are you sure you want to delete?"),
+    content: Text("There's no turning back!"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

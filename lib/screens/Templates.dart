@@ -27,14 +27,16 @@ class CoalamCard extends StatelessWidget {
     );}
 }
 
-class CoalamTextField extends StatelessWidget {
+class CoalamTextInputField extends StatelessWidget {
   final TextEditingController input;
   final String hint;
   final double height;
   final int maximumLines;
   final int maximumCharacters;
+  final String initValue;
 
-  CoalamTextField(
+  CoalamTextInputField(
+      this.initValue,
       this.input,
       this.hint,
       this.height,
@@ -46,7 +48,7 @@ class CoalamTextField extends StatelessWidget {
     return Container(
         height: this.height,
         child:
-    TextField(
+    TextFormField(
       keyboardType: TextInputType.multiline,
       maxLines: this.maximumLines,
       maxLength: this.maximumCharacters,
