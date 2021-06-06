@@ -164,7 +164,8 @@ showAlertDialog(BuildContext context) {
   Widget continueButton = TextButton(
     child: Text("Continue"),
     onPressed: () {
-      Navigator.pushReplacementNamed(context, '/list');
+      int count = 0;
+      Navigator.of(context).popUntil((_) => count++ >= 3);
     },
   );
 
