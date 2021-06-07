@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
 
@@ -114,10 +113,22 @@ void deleteRecipe(id) async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load chef');
+    throw Exception('Failed to delete');
   }
 }
 
+void deleteChef(id) async {
+  final response =
+  await  http.get(Uri.parse('http://10.0.2.2:5000/delete_chef/' + id.toString())  );
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to delete');
+  }
+}
 
 
 Future<int> getCountPictures(id) async {

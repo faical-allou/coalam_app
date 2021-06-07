@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
+import 'package:flutter/services.dart';
 
 class AccountEditScreen extends StatefulWidget {
   final int chefId;
@@ -57,27 +58,26 @@ class AccountEditScreenState extends State<AccountEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-      chefId = widget.chefId;
-      image = Image.network(
-        'http://10.0.2.2:5000/get_image/'+widget.chefId.toString(),
-        height: 100,
-        headers: {'connection': 'Keep-Alive'},
-      );
-
+    chefId = widget.chefId;
+    image = Image.network(
+      'http://10.0.2.2:5000/get_image/' + widget.chefId.toString(),
+      height: 100,
+      headers: {'connection': 'Keep-Alive'},
+    );
 
     return FutureBuilder<Chef>(
         future: fetchChef(widget.chefId),
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
-              print(snapshot.data);
-              if (!["", 0, null].contains(widget.chefId)) {
-                initialTextChefName = snapshot.data.name;
-                initialTextChefDescription = snapshot.data.description;
+            print(snapshot.data);
+            if (!["", 0, null].contains(widget.chefId)) {
+              initialTextChefName = snapshot.data.name;
+              initialTextChefDescription = snapshot.data.description;
 
-                chefInputName = TextEditingController(text: initialTextChefName);
-                chefInputDescription =
-                TextEditingController(text: initialTextChefDescription);
-              }
+              chefInputName = TextEditingController(text: initialTextChefName);
+              chefInputDescription =
+                  TextEditingController(text: initialTextChefDescription);
+            }
             return Scaffold(
               appBar: AppBar(),
               body: Container(
@@ -150,7 +150,16 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                       showAlertDialog(context);
                     },
                   );
-                })
+                }),
+                ElevatedButton(
+                  child: Text("Delete"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  onPressed: () {
+                    showAlertDialogDelete(context, chefId);
+                  },
+                ),
               ])),
             );
           } else {
@@ -164,8 +173,8 @@ showAlertDialog(BuildContext context) {
   Widget continueButton = TextButton(
     child: Text("Continue"),
     onPressed: () {
-      int count = 0;
-      Navigator.of(context).popUntil((_) => count++ >= 3);
+
+      Navigator.of(context).popUntil((route) => route.isFirst);
     },
   );
 
@@ -174,6 +183,42 @@ showAlertDialog(BuildContext context) {
     title: Text("Thank you for joining?"),
     content: Text("Ready to cook?"),
     actions: [
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialogDelete(BuildContext context, chefId) {
+  Widget continueButton = TextButton(
+    child: Text("yes, delete"),
+    onPressed: () {
+      deleteChef(chefId);
+      imageCache.clear();
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    },
+  );
+
+  Widget cancelButton = TextButton(
+    child: Text("cancel"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Are you sure you want to delete your account?"),
+    content: Text("It will be gone forever!"),
+    actions: [
+      cancelButton,
       continueButton,
     ],
   );

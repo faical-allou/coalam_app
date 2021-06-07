@@ -3,7 +3,7 @@ import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:flutter/services.dart';
 
 class RecipeEditScreen extends StatefulWidget {
   final Recipe recipe;
@@ -150,7 +150,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 recipeInputTools.text,
                 chefId,
                 imageFile );
-            showAlertDialog(context);
+            showAlertDialogEdit(context);
           },
         ),
             ElevatedButton(
@@ -167,13 +167,13 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   }
 }
 
-showAlertDialog(BuildContext context) {
+showAlertDialogEdit(BuildContext context) {
 
   Widget continueButton = TextButton(
     child: Text("Continue"),
     onPressed:  () {
       int count = 0;
-      Navigator.of(context).popUntil((_) => count++ >= 3);
+      Navigator.of(context).popUntil((route) => route.isFirst);
     },
   );
 
@@ -201,8 +201,7 @@ showAlertDialogDelete(BuildContext context, recipeId) {
     child: Text("yes, delete"),
     onPressed:  () {
       deleteRecipe(recipeId);
-      int count = 0;
-      Navigator.of(context).popUntil((_) => count++ >= 4);
+      Navigator.of(context).popUntil((route) => route.isFirst);
     },
   );
 
@@ -232,3 +231,4 @@ showAlertDialogDelete(BuildContext context, recipeId) {
     },
   );
 }
+
