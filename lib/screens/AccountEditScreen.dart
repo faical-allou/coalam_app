@@ -132,33 +132,45 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                     160,4, 200),
                 Consumer<GlobalState>(builder: (context, status, child) {
                   var status = context.read<GlobalState>();
-                  return ElevatedButton(
+                  return Column(children:[
+                    ElevatedButton(
                     child: chefId == 0
-                      ? Text("Create")
-                    : Text("Update"),
+                        ? Text("Create")
+                        : Text("Update"),
                     onPressed: () {
-                      asyncChefAccountUpload(chefInputName.text,
-                              chefInputDescription.text, chefId, imageFile)
-                          .then((textResponse) => {
-                                status.setChefId(int.parse(
-                                    jsonDecode(textResponse)['chefId'])),
-                                status.logIn(),
-                              });
-                      status.logOut();
-                      showAlertDialog(context);
+                      if (isValidAccount(chefInputName.text,
+                          chefInputDescription.text, chefId, imageFile))
+                      {
+                        asyncChefAccountUpload(chefInputName.text,
+                        chefInputDescription.text, chefId, imageFile)
+                            .then((textResponse) => {
+                        status.setChefId(int.parse(
+                        jsonDecode(textResponse)['chefId'])),
+                        status.logIn(),
+                        });
+                        showAlertDialog(context);
+                      } else {
+                        showAlertDialogValidation(context);
+                      }
                     },
-                  );
-                }),
-                ElevatedButton(
+                  )
+               ,
+                 chefId != 0
+                     ?   ElevatedButton(
                   child: Text("Delete"),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
                   ),
                   onPressed: () {
                     showAlertDialogDelete(context, chefId);
+                    status.logOut();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                ),
-              ])),
+                )
+                 : Container()
+
+             ]);},
+                )])),
             );
           } else {
             return CircularProgressIndicator();
@@ -197,7 +209,6 @@ showAlertDialogDelete(BuildContext context, chefId) {
     onPressed: () {
       deleteChef(chefId);
       imageCache.clear();
-      Navigator.of(context).popUntil((route) => route.isFirst);
     },
   );
 
@@ -223,4 +234,34 @@ showAlertDialogDelete(BuildContext context, chefId) {
       return alert;
     },
   );
+}
+
+showAlertDialogValidation(BuildContext context) {
+
+  Widget cancelButton = TextButton(
+    child: Text("Go back"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Text("Oops something is missing"),
+    content: Text("Make sure all fields are filled and attach a picture"),
+    actions: [
+      cancelButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+
+bool isValidAccount(text1, text2, id , image){
+  return (text1 != null) & (text2 != null) & (id != null) & (image != null);
 }

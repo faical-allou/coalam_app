@@ -138,26 +138,35 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 recipeInputTools,
                 Text("tools").data, 120, 10, 200),
 
-            ElevatedButton(
+            Column(children: [
+              ElevatedButton(
           child: recipeId == 0
               ? Text("Create")
               : Text("Update"),
           onPressed: () {
-            asyncRecipeUpload(
+            isValidRecipe(recipeId, recipeInputName.text, recipeInputDescription.text,
+                recipeInputIngredients.text, recipeInputTools.text,
+                chefId, imageFile )
+            ? () {
+              asyncRecipeUpload(
                 recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
                 chefId, imageFile );
             showAlertDialogEdit(context);
+          }()
+          : showAlertDialogValidation(context);
           },
-        ),
-            ElevatedButton(
+        ), recipeId != 0
+           ? ElevatedButton(
               child: Text("Delete"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,),
               onPressed: () {
                 showAlertDialogDelete(context, recipeId);
               },
-            ),
+            )
+            : Container(),
+            ])
       ])),
     );
   }
@@ -224,3 +233,33 @@ showAlertDialogDelete(BuildContext context, recipeId) {
   );
 }
 
+showAlertDialogValidation(BuildContext context) {
+
+  Widget cancelButton = TextButton(
+    child: Text("Go back"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Text("Oops something is missing"),
+    content: Text("Make sure all fields are filled and attach a picture"),
+    actions: [
+      cancelButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+bool isValidRecipe(id1, text1, text2,
+text3, text4, id2, image){
+  return (text1 != null) & (text2 != null) & (text3 != null) & (text4 != null)
+      & (id1 != null) & (id2 != null) & (image != null);
+}
