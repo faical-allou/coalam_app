@@ -8,12 +8,7 @@ class Recipe {
   final String name;
   final int chefId;
 
-  Recipe({
-    this.details,
-    this.id,
-    this.name,
-    this.chefId,
-  });
+  Recipe({this.details,this.id,this.name,this.chefId});
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
@@ -31,12 +26,7 @@ class Chef {
   final String name;
   final String description;
 
-  Chef({
-    this.details,
-    this.chefId,
-    this.name,
-    this.description,
-  });
+  Chef({this.details,this.chefId,this.name,this.description});
 
   factory Chef.fromJson(Map<String, dynamic> json) {
     return Chef(
@@ -52,35 +42,26 @@ class Chef {
 
 Future<List<Recipe>> fetchAllRecipes() async {
   final response = await http.get(Uri.parse('http://10.0.2.2:5000/all'));
-
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Iterable l = jsonDecode(response.body);
-    List<Recipe> listRecipes =
-    List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
-    return listRecipes;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load recipes');
+      Iterable l = jsonDecode(response.body);
+      List<Recipe> listRecipes =
+      List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
+      return listRecipes;
+  }
+  else {
+      throw Exception('Failed to load recipes');
   }
 }
 
 Future<Recipe> fetchRecipe(id) async {
   final response =
   await http.get(Uri.parse('http://10.0.2.2:5000/recipe/' + id.toString())  );
-
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Iterable l = jsonDecode(response.body);
-    List<Recipe> listRecipes =  List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
-    print(listRecipes[0]);
-    return listRecipes[0];
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+      Iterable l = jsonDecode(response.body);
+      List<Recipe> listRecipes =  List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
+      return listRecipes[0];
+  }
+  else {
     throw Exception('Failed to load recipes');
   }
 }
@@ -88,18 +69,12 @@ Future<Recipe> fetchRecipe(id) async {
 Future<Chef> fetchChef(id) async {
   final response =
   await http.get(Uri.parse('http://10.0.2.2:5000/chef/' + id.toString())  );
-  print('in fetch');
-  print(jsonDecode(response.body));
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Iterable l = jsonDecode(response.body);
-    print(jsonDecode(response.body));
-    List<Chef> listChefs = List<Chef>.from(l.map((model) => Chef.fromJson(model)));
-    return listChefs[0];
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+      Iterable l = jsonDecode(response.body);
+      List<Chef> listChefs = List<Chef>.from(l.map((model) => Chef.fromJson(model)));
+      return listChefs[0];
+  }
+  else {
     throw Exception('Failed to load chef');
   }
 }
@@ -108,11 +83,8 @@ void deleteRecipe(id) async {
   final response =
      await  http.get(Uri.parse('http://10.0.2.2:5000/delete_recipe/' + id.toString())  );
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+  }
+  else {
     throw Exception('Failed to delete');
   }
 }
@@ -121,11 +93,8 @@ void deleteChef(id) async {
   final response =
   await  http.get(Uri.parse('http://10.0.2.2:5000/delete_chef/' + id.toString())  );
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+  }
+  else {
     throw Exception('Failed to delete');
   }
 }
@@ -134,15 +103,11 @@ void deleteChef(id) async {
 Future<int> getCountPictures(id) async {
   final response =
     await http.get(Uri.parse('http://10.0.2.2:5000/get_image/' + id.toString() + '/count'));
-
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final count = jsonDecode(response.body);
-    return count['data'];
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+      final count = jsonDecode(response.body);
+      return count['data'];
+  }
+  else {
     throw Exception('Failed to load recipes');
   }
 }
@@ -151,13 +116,10 @@ Future<List<dynamic>> getNextEvents(chefId,id) async {
   final response =
    await http.get(Uri.parse('http://10.0.2.2:5000/get_schedule/' + chefId.toString() + '/'+id.toString()));
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final output = jsonDecode(response.body);
-    return output['items'];
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+      final output = jsonDecode(response.body);
+      return output['items'];
+  }
+  else {
     throw Exception('Failed to load recipes');
   }
 }
@@ -193,7 +155,6 @@ asyncRecipeUpload(
   //Get the response from the server
   var responseData = await response.stream.toBytes();
   var responseString = String.fromCharCodes(responseData);
-  print(responseString);
 }
 
 asyncChefAccountUpload(

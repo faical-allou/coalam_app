@@ -6,7 +6,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
-import 'package:flutter/services.dart';
 
 class AccountEditScreen extends StatefulWidget {
   final int chefId;
@@ -69,14 +68,12 @@ class AccountEditScreenState extends State<AccountEditScreen> {
         future: fetchChef(widget.chefId),
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data);
             if (!["", 0, null].contains(widget.chefId)) {
               initialTextChefName = snapshot.data.name;
               initialTextChefDescription = snapshot.data.description;
 
               chefInputName = TextEditingController(text: initialTextChefName);
-              chefInputDescription =
-                  TextEditingController(text: initialTextChefDescription);
+              chefInputDescription =  TextEditingController(text: initialTextChefDescription);
             }
             return Scaffold(
               appBar: AppBar(),
@@ -132,13 +129,13 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                     initialTextChefDescription,
                     chefInputDescription,
                     Text('description').data,
-                    160,
-                    4,
-                    200),
+                    160,4, 200),
                 Consumer<GlobalState>(builder: (context, status, child) {
                   var status = context.read<GlobalState>();
                   return ElevatedButton(
-                    child: Text("Send"),
+                    child: chefId == 0
+                      ? Text("Create")
+                    : Text("Update"),
                     onPressed: () {
                       asyncChefAccountUpload(chefInputName.text,
                               chefInputDescription.text, chefId, imageFile)
@@ -147,6 +144,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     jsonDecode(textResponse)['chefId'])),
                                 status.logIn(),
                               });
+                      status.logOut();
                       showAlertDialog(context);
                     },
                   );
@@ -173,12 +171,10 @@ showAlertDialog(BuildContext context) {
   Widget continueButton = TextButton(
     child: Text("Continue"),
     onPressed: () {
-
       Navigator.of(context).popUntil((route) => route.isFirst);
     },
   );
 
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Thank you for joining?"),
     content: Text("Ready to cook?"),
@@ -187,7 +183,6 @@ showAlertDialog(BuildContext context) {
     ],
   );
 
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -213,7 +208,6 @@ showAlertDialogDelete(BuildContext context, chefId) {
     },
   );
 
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Are you sure you want to delete your account?"),
     content: Text("It will be gone forever!"),
@@ -223,7 +217,6 @@ showAlertDialogDelete(BuildContext context, chefId) {
     ],
   );
 
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {

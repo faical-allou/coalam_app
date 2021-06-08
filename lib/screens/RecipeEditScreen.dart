@@ -139,17 +139,14 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 Text("tools").data, 120, 10, 200),
 
             ElevatedButton(
-          child: Text("Send"),
+          child: recipeId == 0
+              ? Text("Create")
+              : Text("Update"),
           onPressed: () {
-
             asyncRecipeUpload(
-                recipeId,
-                recipeInputName.text,
-                recipeInputDescription.text,
-                recipeInputIngredients.text,
-                recipeInputTools.text,
-                chefId,
-                imageFile );
+                recipeId, recipeInputName.text, recipeInputDescription.text,
+                recipeInputIngredients.text, recipeInputTools.text,
+                chefId, imageFile );
             showAlertDialogEdit(context);
           },
         ),
@@ -161,7 +158,6 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 showAlertDialogDelete(context, recipeId);
               },
             ),
-
       ])),
     );
   }
@@ -177,7 +173,6 @@ showAlertDialogEdit(BuildContext context) {
     },
   );
 
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Thank you for your submission"),
     content: Text("Now you're cooking"),
@@ -186,7 +181,6 @@ showAlertDialogEdit(BuildContext context) {
     ],
   );
 
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -212,7 +206,6 @@ showAlertDialogDelete(BuildContext context, recipeId) {
     },
   );
 
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Are you sure you want to delete?"),
     content: Text("There's no turning back!"),
@@ -223,7 +216,6 @@ showAlertDialogDelete(BuildContext context, recipeId) {
 
   );
 
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {
