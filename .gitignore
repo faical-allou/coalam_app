@@ -45,3 +45,4 @@ app.*.map.json
 
 # Assets
 /assets
+lib/globals.dart

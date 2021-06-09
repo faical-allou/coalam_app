@@ -28,7 +28,9 @@ class RecipesListScreen extends StatelessWidget {
                               "\n and your id is: " +
                               status.chefId.toString()),
                           onPressed: () {
-                            status.setChefId(0);
+                            status.isLoggedIn
+                            ? status.setChefId(0)
+                            : status.setChefId(1);
                             status.toggleLogIn();
                           },
                         );

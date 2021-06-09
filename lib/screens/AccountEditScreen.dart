@@ -73,7 +73,8 @@ class AccountEditScreenState extends State<AccountEditScreen> {
               initialTextChefDescription = snapshot.data.description;
 
               chefInputName = TextEditingController(text: initialTextChefName);
-              chefInputDescription =  TextEditingController(text: initialTextChefDescription);
+              chefInputDescription =
+                  TextEditingController(text: initialTextChefDescription);
             }
             return Scaffold(
               appBar: AppBar(),
@@ -129,48 +130,52 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                     initialTextChefDescription,
                     chefInputDescription,
                     Text('description').data,
-                    160,4, 200),
-                Consumer<GlobalState>(builder: (context, status, child) {
-                  var status = context.read<GlobalState>();
-                  return Column(children:[
-                    ElevatedButton(
-                    child: chefId == 0
-                        ? Text("Create")
-                        : Text("Update"),
-                    onPressed: () {
-                      if (isValidAccount(chefInputName.text,
-                          chefInputDescription.text, chefId, imageFile))
-                      {
-                        asyncChefAccountUpload(chefInputName.text,
-                        chefInputDescription.text, chefId, imageFile)
-                            .then((textResponse) => {
-                        status.setChefId(int.parse(
-                        jsonDecode(textResponse)['chefId'])),
-                        status.logIn(),
-                        });
-                        showAlertDialog(context);
-                      } else {
-                        showAlertDialogValidation(context);
-                      }
-                    },
-                  )
-               ,
-                 chefId != 0
-                     ?   ElevatedButton(
-                  child: Text("Delete"),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  onPressed: () {
-                    showAlertDialogDelete(context, chefId);
-                    status.logOut();
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    160,
+                    4,
+                    200),
+                Consumer<GlobalState>(
+                  builder: (context, status, child) {
+                    var status = context.read<GlobalState>();
+                    return Column(children: [
+                      ElevatedButton(
+                        child: chefId == 0 ? Text("Create") : Text("Update"),
+                        onPressed: () {
+                          if (isValidAccount(chefInputName.text,
+                              chefInputDescription.text, chefId, image ?? imageFile)) {
+                            asyncChefAccountUpload(
+                                    chefInputName.text,
+                                    chefInputDescription.text,
+                                    chefId,
+                                    imageFile)
+                                .then((textResponse) => {
+                                      status.setChefId(int.parse(
+                                          jsonDecode(textResponse)['chefId'])),
+                                      status.logIn(),
+                                    });
+                            showAlertDialog(context);
+                          } else {
+                            showAlertDialogValidation(context);
+                          }
+                        },
+                      ),
+                      chefId != 0
+                          ? ElevatedButton(
+                              child: Text("Delete"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                              ),
+                              onPressed: () {
+                                showAlertDialogDelete(context, chefId);
+                                status.logOut();
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              },
+                            )
+                          : Container()
+                    ]);
                   },
                 )
-                 : Container()
-
-             ]);},
-                )])),
+              ])),
             );
           } else {
             return CircularProgressIndicator();
@@ -237,7 +242,6 @@ showAlertDialogDelete(BuildContext context, chefId) {
 }
 
 showAlertDialogValidation(BuildContext context) {
-
   Widget cancelButton = TextButton(
     child: Text("Go back"),
     onPressed: () {
@@ -261,7 +265,7 @@ showAlertDialogValidation(BuildContext context) {
   );
 }
 
-
-bool isValidAccount(text1, text2, id , image){
+bool isValidAccount(text1, text2, id, image) {
+  [text1, text2, id, image].forEach(print);
   return (text1 != null) & (text2 != null) & (id != null) & (image != null);
 }
