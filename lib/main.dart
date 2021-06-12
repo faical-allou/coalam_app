@@ -81,6 +81,7 @@ class GlobalState with ChangeNotifier {
   void toggleLogIn() {
     isLoggedIn = !isLoggedIn;
     notifyListeners();
+    isLoggedIn ? setChefId(5) : setChefId(0);
   }
   void setChefId(int id){
     chefId = id;

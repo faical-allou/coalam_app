@@ -110,15 +110,11 @@ class RecipeElement extends StatelessWidget {
     return Container(
       child:
           CoalamCard(Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Image.network(
-          'http://10.0.2.2:5000/get_image/' + id.toString() + '/1',
-          height: 100,
-          headers: {'connection': 'Keep-Alive'},
-        ),
+            imageFetcher('/get_image/' + id.toString() + '/1', 100),
         Expanded(
           child: TextButton(
             child:
-                Text('View Details stuff for ' + recipe.details['recipeName']),
+                Text('View details for ' + recipe.details['recipeName']),
             onPressed: () {
               Navigator.pushNamed(
                 context,

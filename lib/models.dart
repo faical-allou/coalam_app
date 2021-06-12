@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
 import 'globals.dart' as globals;
+import 'package:flutter/material.dart';
 
 class Recipe {
   final Map<String, dynamic> details;
@@ -42,9 +43,10 @@ class Chef {
 
 
 Future<List<Recipe>> fetchAllRecipes() async {
-  final response = await http.get(Uri.parse('http://10.0.2.2:5000/all'),
+  final response = await http.get(Uri.parse(globals.endpoint+'/all'),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
+
   if (response.statusCode == 200) {
       Iterable l = jsonDecode(response.body);
       List<Recipe> listRecipes =
@@ -58,7 +60,7 @@ Future<List<Recipe>> fetchAllRecipes() async {
 
 Future<Recipe> fetchRecipe(id) async {
   final response =
-  await http.get(Uri.parse('http://10.0.2.2:5000/recipe/' + id.toString()),
+  await http.get(Uri.parse(globals.endpoint+'/recipe/' + id.toString()),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
@@ -73,7 +75,7 @@ Future<Recipe> fetchRecipe(id) async {
 
 Future<Chef> fetchChef(id) async {
   final response =
-  await http.get(Uri.parse('http://10.0.2.2:5000/chef/' + id.toString()),
+  await http.get(Uri.parse(globals.endpoint+'/chef/' + id.toString()),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
@@ -88,7 +90,7 @@ Future<Chef> fetchChef(id) async {
 
 void deleteRecipe(id) async {
   final response =
-     await  http.get(Uri.parse('http://10.0.2.2:5000/delete_recipe/' + id.toString()),
+     await  http.get(Uri.parse(globals.endpoint+'/delete_recipe/' + id.toString()),
        headers: {HttpHeaders.authorizationHeader: globals.appKey,},
      );
   if (response.statusCode == 200) {
@@ -100,7 +102,7 @@ void deleteRecipe(id) async {
 
 void deleteChef(id) async {
   final response =
-  await  http.get(Uri.parse('http://10.0.2.2:5000/delete_chef/' + id.toString()),
+  await  http.get(Uri.parse(globals.endpoint+'/delete_chef/' + id.toString()),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
@@ -111,9 +113,10 @@ void deleteChef(id) async {
 }
 
 
+
 Future<int> getCountPictures(id) async {
   final response =
-    await http.get(Uri.parse('http://10.0.2.2:5000/get_image/' + id.toString() + '/count'),
+    await http.get(Uri.parse(globals.endpoint+'/get_image/' + id.toString() + '/count'),
       headers: {HttpHeaders.authorizationHeader: globals.appKey,},
     );
   if (response.statusCode == 200) {
@@ -127,7 +130,7 @@ Future<int> getCountPictures(id) async {
 
 Future<List<dynamic>> getNextEvents(chefId,id) async {
   final response =
-   await http.get(Uri.parse('http://10.0.2.2:5000/get_schedule/' + chefId.toString() + '/'+id.toString()),
+   await http.get(Uri.parse(globals.endpoint+'/get_schedule/' + chefId.toString() + '/'+id.toString()),
      headers: {HttpHeaders.authorizationHeader: globals.appKey,},
    );
   if (response.statusCode == 200) {
@@ -149,7 +152,7 @@ asyncRecipeUpload(
     File file
     ) async{
   //create multipart request for POST or PATCH method
-  var request = http.MultipartRequest("POST", Uri.parse("http://10.0.2.2:5000/edit_recipe/"),);
+  var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_recipe/"),);
   request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   //add text fields
 
@@ -180,7 +183,7 @@ asyncChefAccountUpload(
     File file
     ) async {
   //create multipart request for POST or PATCH method
-  var request = http.MultipartRequest("POST", Uri.parse("http://10.0.2.2:5000/edit_account/"),);
+  var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_account/"),);
   request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   //add text fields
 
@@ -200,4 +203,12 @@ asyncChefAccountUpload(
   var responseData = await response.stream.toBytes();
   var responseString = String.fromCharCodes(responseData);
   return responseString;
+}
+
+imageFetcher(String imageLinkToFetch, double h){
+  return Image.network(
+    globals.endpoint + imageLinkToFetch,
+    height: h,
+    headers: {'connection': 'Keep-Alive'},
+  );
 }

@@ -58,11 +58,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
   @override
   Widget build(BuildContext context) {
     chefId = widget.chefId;
-    image = Image.network(
-      'http://10.0.2.2:5000/get_image/' + widget.chefId.toString(),
-      height: 100,
-      headers: {'connection': 'Keep-Alive'},
-    );
+    image = imageFetcher('/get_image/' + widget.chefId.toString(), 200);
 
     return FutureBuilder<Chef>(
         future: fetchChef(widget.chefId),
