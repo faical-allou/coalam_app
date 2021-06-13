@@ -18,8 +18,8 @@ class RecipesListScreen extends StatelessWidget {
                 body: Align(
                   child: ListView(
                     children: [
-                      for (var i = 0; i <= snapshot.data.length - 1; i += 1)
-                        RecipeElement(snapshot.data[i], i + 1),
+                      for (var i = 0; i <= snapshot.data!.length - 1; i += 1)
+                        RecipeElement(snapshot.data![i], i + 1),
                       Consumer<GlobalState>(builder: (context, status, child) {
                         var status = context.read<GlobalState>();
                         return TextButton(
@@ -114,11 +114,11 @@ class RecipeElement extends StatelessWidget {
         Expanded(
           child: TextButton(
             child:
-                Text('View details for ' + recipe.details['recipeName']),
+                Text('View details for ' + recipe.details!['recipeName']),
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                '/details/' + recipe.details['recipeId'].toString(),
+                '/details/' + recipe.details!['recipeId'].toString(),
               );
             },
           ),

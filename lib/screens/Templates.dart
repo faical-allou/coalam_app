@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:coalam_app/models.dart';
 
@@ -29,11 +30,11 @@ class CoalamCard extends StatelessWidget {
 
 class CoalamTextInputField extends StatelessWidget {
   final TextEditingController input;
-  final String hint;
+  final String? hint;
   final double height;
   final int maximumLines;
   final int maximumCharacters;
-  final String initValue;
+  final String? initValue;
 
   CoalamTextInputField(
       this.initValue,
@@ -45,10 +46,12 @@ class CoalamTextInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return
+      Container(
         height: this.height,
         child:
     TextFormField(
+      textAlign: TextAlign.center,
       keyboardType: TextInputType.multiline,
       maxLines: this.maximumLines,
       maxLength: this.maximumCharacters,

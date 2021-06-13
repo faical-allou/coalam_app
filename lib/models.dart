@@ -5,10 +5,10 @@ import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 
 class Recipe {
-  final Map<String, dynamic> details;
-  final int id;
-  final String name;
-  final int chefId;
+  final Map<String, dynamic>? details;
+  final int? id;
+  final String? name;
+  final int? chefId;
 
   Recipe({this.details,this.id,this.name,this.chefId});
 
@@ -23,10 +23,10 @@ class Recipe {
 }
 
 class Chef {
-  final Map<String, dynamic> details;
-  final int chefId;
-  final String name;
-  final String description;
+  final Map<String, dynamic>? details;
+  final int? chefId;
+  final String? name;
+  final String? description;
 
   Chef({this.details,this.chefId,this.name,this.description});
 
@@ -54,7 +54,7 @@ Future<List<Recipe>> fetchAllRecipes() async {
       return listRecipes;
   }
   else {
-      throw Exception('Failed to load recipes');
+      throw Exception('Failed to load list of recipes');
   }
 }
 
@@ -96,7 +96,7 @@ void deleteRecipe(id) async {
   if (response.statusCode == 200) {
   }
   else {
-    throw Exception('Failed to delete');
+    throw Exception('Failed to delete recipe');
   }
 }
 
@@ -108,13 +108,13 @@ void deleteChef(id) async {
   if (response.statusCode == 200) {
   }
   else {
-    throw Exception('Failed to delete');
+    throw Exception('Failed to delete chef');
   }
 }
 
 
 
-Future<int> getCountPictures(id) async {
+Future<int?> getCountPictures(id) async {
   final response =
     await http.get(Uri.parse(globals.endpoint+'/get_image/' + id.toString() + '/count'),
       headers: {HttpHeaders.authorizationHeader: globals.appKey,},
@@ -124,11 +124,11 @@ Future<int> getCountPictures(id) async {
       return count['data'];
   }
   else {
-    throw Exception('Failed to load recipes');
+    throw Exception('Failed to load count');
   }
 }
 
-Future<List<dynamic>> getNextEvents(chefId,id) async {
+Future<List<dynamic>?> getNextEvents(chefId,id) async {
   final response =
    await http.get(Uri.parse(globals.endpoint+'/get_schedule/' + chefId.toString() + '/'+id.toString()),
      headers: {HttpHeaders.authorizationHeader: globals.appKey,},
@@ -138,18 +138,18 @@ Future<List<dynamic>> getNextEvents(chefId,id) async {
       return output['items'];
   }
   else {
-    throw Exception('Failed to load recipes');
+    throw Exception('Failed to load events');
   }
 }
 
 asyncRecipeUpload(
-    int recipeId,
+    int? recipeId,
     String recipeName,
     String recipeDescription,
     String ingredients,
     String tools,
-    int chefId,
-    File file
+    int? chefId,
+    File? file
     ) async{
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_recipe/"),);
@@ -179,8 +179,8 @@ asyncRecipeUpload(
 asyncChefAccountUpload(
     String chefName,
     String chefDescription,
-    int chefId,
-    File file
+    int? chefId,
+    File? file
     ) async {
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_account/"),);
@@ -212,3 +212,40 @@ imageFetcher(String imageLinkToFetch, double h){
     headers: {'connection': 'Keep-Alive'},
   );
 }
+
+createEvent(int? chefId, int recipeId, String start, String end, String description, Function updateScreen) async {
+  var request = http.MultipartRequest("POST", Uri.parse(
+      globals.endpoint + "/add_event/" + chefId.toString() + "/" +
+          recipeId.toString()),);
+  request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
+  request.fields["eventStart"] = start;
+  request.fields["eventEnd"] = end;
+  request.fields["eventDescription"] = description;
+  var response = await request.send();
+
+  //Get the response from the server
+  var responseData = await response.stream.toBytes();
+  var responseString = String.fromCharCodes(responseData);
+  if (response.statusCode == 200) {
+    updateScreen(() {});
+    return 'event created';
+  }
+  else {
+    throw Exception('Failed to create event');
+  }
+}
+
+deleteEvent(String eventId,  Function updateScreen ) async {
+  final response =
+  await http.get(Uri.parse(globals.endpoint+'/delete_event/' + eventId.toString()),
+    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+  );
+  if (response.statusCode == 200) {
+    updateScreen((){});
+    return 'event deleted';
+  }
+  else {
+    throw Exception('Failed to delete event');
+  }
+}
+

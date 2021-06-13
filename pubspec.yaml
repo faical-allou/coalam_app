@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -31,11 +31,15 @@ dependencies:
   # these are additional dependencies
   provider: ^5.0.0
   http: any
-  carousel_slider: ^3.0.0
+  carousel_slider: ^4.0.0-nullsafety.0
   url_launcher: 6.0.4
   intl: any
   image_picker: 0.7.5
   flutter_uploader: 1.2.1
+  flutter_datetime_picker:
+    git:
+      url: https://github.com/AlexHartford/flutter_datetime_picker.git
+      ref: master
 
 dev_dependencies:
   flutter_test:

@@ -6,9 +6,9 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class RecipeEditScreen extends StatefulWidget {
-  final Recipe recipe;
-  final Image imageInput;
-  const RecipeEditScreen ({ Key key, this.recipe, this.imageInput }): super(key: key);
+  final Recipe? recipe;
+  final Image? imageInput;
+  const RecipeEditScreen ({ Key? key, this.recipe, this.imageInput }): super(key: key);
 
   State createState() => new RecipeEditScreenState();
 }
@@ -18,16 +18,16 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   var recipeInputDescription = TextEditingController();
   var recipeInputIngredients = TextEditingController();
   var recipeInputTools = TextEditingController();
-  var chefId = 0;
-  var recipeId = 0;
+  int? chefId = 0;
+  int? recipeId = 0;
 
-  Image image;
-  File imageFile;
+  Image? image;
+  File? imageFile;
 
-  var initialTextRecipeName = "";
-  var initialTextRecipeDescription = "";
-  var initialTextIngredients = "";
-  var initialTextTools = "";
+  String? initialTextRecipeName = "";
+  String? initialTextRecipeDescription = "";
+  String? initialTextIngredients = "";
+  String? initialTextTools = "";
 
   final picker = ImagePicker();
 
@@ -37,7 +37,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
         image = Image.file(File(pickedFile.path));
-        imageCache.clear();
+        imageCache!.clear();
       } else {
         print('No image selected.');
       }
@@ -49,8 +49,8 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
-        image = Image(image: FileImage(imageFile));
-        imageCache.clear();
+        image = Image(image: FileImage(imageFile!));
+        imageCache!.clear();
       } else {
         print('No image selected.');
       }
@@ -59,11 +59,11 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if ( widget.recipe.id != 0  ) {
-      initialTextRecipeName = widget.recipe.details['recipeName'];
-      initialTextRecipeDescription = widget.recipe.details['description'];
-      initialTextIngredients = widget.recipe.details['ingredients'];
-      initialTextTools = widget.recipe.details['tools'];
+    if ( widget.recipe!.id != 0  ) {
+      initialTextRecipeName = widget.recipe!.details!['recipeName'];
+      initialTextRecipeDescription = widget.recipe!.details!['description'];
+      initialTextIngredients = widget.recipe!.details!['ingredients'];
+      initialTextTools = widget.recipe!.details!['tools'];
 
       recipeInputName = TextEditingController(text:initialTextRecipeName);
       recipeInputDescription = TextEditingController(text: initialTextRecipeDescription);
@@ -71,10 +71,10 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
       recipeInputTools = TextEditingController(text: initialTextTools);
 
       var initialImage = widget.imageInput;
-      recipeId = widget.recipe.details['recipeId'];
+      recipeId = widget.recipe!.details!['recipeId'];
       image = initialImage;
     }
-    chefId = widget.recipe.chefId;
+    chefId = widget.recipe!.chefId;
 
     return Scaffold(
       appBar: AppBar(),
@@ -95,7 +95,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                       ? Text('Choose the main image')
                       : imageFile == null
                         ? image
-                        : Image(image: FileImage(imageFile))
+                        : Image(image: FileImage(imageFile!))
                 ),
               ),
               Column(mainAxisAlignment: MainAxisAlignment.end, children: [

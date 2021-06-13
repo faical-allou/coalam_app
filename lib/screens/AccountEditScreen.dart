@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
 
 class AccountEditScreen extends StatefulWidget {
-  final int chefId;
+  final int? chefId;
 
-  const AccountEditScreen({Key key, this.chefId}) : super(key: key);
+  const AccountEditScreen({Key? key, this.chefId}) : super(key: key);
 
   State createState() => new AccountEditScreenState();
 }
@@ -18,14 +18,14 @@ class AccountEditScreen extends StatefulWidget {
 class AccountEditScreenState extends State<AccountEditScreen> {
   var chefInputName = TextEditingController();
   var chefInputDescription = TextEditingController();
-  var chefId = 0;
+  int? chefId = 0;
   var recipeId = 0;
 
-  Image image;
-  File imageFile;
+  Image? image;
+  File? imageFile;
 
-  var initialTextChefName = "";
-  var initialTextChefDescription = "";
+  String? initialTextChefName = "";
+  String? initialTextChefDescription = "";
 
   final picker = ImagePicker();
 
@@ -35,7 +35,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
         image = Image.file(File(pickedFile.path));
-        imageCache.clear();
+        imageCache!.clear();
       } else {
         print('No image selected.');
       }
@@ -47,8 +47,8 @@ class AccountEditScreenState extends State<AccountEditScreen> {
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
-        image = Image(image: FileImage(imageFile));
-        imageCache.clear();
+        image = Image(image: FileImage(imageFile!));
+        imageCache!.clear();
       } else {
         print('No image selected.');
       }
@@ -65,8 +65,8 @@ class AccountEditScreenState extends State<AccountEditScreen> {
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
             if (!["", 0, null].contains(widget.chefId)) {
-              initialTextChefName = snapshot.data.name;
-              initialTextChefDescription = snapshot.data.description;
+              initialTextChefName = snapshot.data!.name;
+              initialTextChefDescription = snapshot.data!.description;
 
               chefInputName = TextEditingController(text: initialTextChefName);
               chefInputDescription =
@@ -93,7 +93,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     ? Text('Choose the main image')
                                     : imageFile == null
                                         ? image
-                                        : Image(image: FileImage(imageFile))),
+                                        : Image(image: FileImage(imageFile!))),
                           ),
                           Column(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -209,7 +209,7 @@ showAlertDialogDelete(BuildContext context, chefId) {
     child: Text("yes, delete"),
     onPressed: () {
       deleteChef(chefId);
-      imageCache.clear();
+      imageCache!.clear();
     },
   );
 

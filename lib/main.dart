@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         if (settings.name == '/') {
           return MaterialPageRoute(builder: (context) => HomeScreen());
         }
-        var uri = Uri.parse(settings.name);
+        var uri = Uri.parse(settings.name!);
         // Handle '/details/:id'
         if (uri.pathSegments.length == 2 &&
             uri.pathSegments.first == 'details') {
