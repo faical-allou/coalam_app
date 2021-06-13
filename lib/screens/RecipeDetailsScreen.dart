@@ -139,10 +139,10 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
 
               CoalamCard(Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
-                            TextButton(
+                            Container(width: 100,
+                              child: TextButton(
                               child: Text(
                                 DateFormat("d-MMM-y @ HH:mm")
                                     .format(selectedDateTime)
@@ -163,11 +163,11 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     currentTime: selectedDateTime,
                                     locale: LocaleType.en);
                               },
-                            ),
+                            ),),
                             Container(width: MediaQuery.of(context).size.width * 0.30,
                                 child: CoalamTextInputField(
                                 "",  descriptionInput,
-                                Text('add a description').data, 80, 1, 30)),
+                                Text('Title').data, 60, 1, 30)),
 
                       ElevatedButton(
                         child: Text('+ add event'),

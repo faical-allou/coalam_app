@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:coalam_app/models.dart';
+import 'package:flutter/services.dart';
 
 
 
@@ -51,12 +51,14 @@ class CoalamTextInputField extends StatelessWidget {
         height: this.height,
         child:
     TextFormField(
+      maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       textAlign: TextAlign.center,
       keyboardType: TextInputType.multiline,
       maxLines: this.maximumLines,
       maxLength: this.maximumCharacters,
-      maxLengthEnforced:  true,
+
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         hintText: this.hint,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
