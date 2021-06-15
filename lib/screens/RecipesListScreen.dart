@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:coalam_app/main.dart';
-import 'package:coalam_app/models.dart';
+import 'package:coalam_app/models/data.dart';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/screens/Templates.dart';
 import 'package:coalam_app/screens/AccountEditScreen.dart';
 import 'package:coalam_app/screens/RecipeEditScreen.dart';
+import 'package:coalam_app/models/images.dart';
+
 
 class RecipesListScreen extends StatelessWidget {
   @override
@@ -23,10 +25,10 @@ class RecipesListScreen extends StatelessWidget {
                       Consumer<GlobalState>(builder: (context, status, child) {
                         var status = context.read<GlobalState>();
                         return TextButton(
-                          child: Text("Are logged-in?: " +
+                          child: CTransText("Are logged-in?: " +
                               status.isLoggedIn.toString() +
                               "\n and your id is: " +
-                              status.chefId.toString()),
+                              status.chefId.toString()).textWidget(),
                           onPressed: () {
                             status.isLoggedIn
                             ? status.setChefId(0)
@@ -51,7 +53,7 @@ class RecipesListScreen extends StatelessWidget {
                               children: [
                                 IconButton(
                                     icon: Icon(Icons.add_box),
-                                    tooltip: 'add Recipe',
+                                    tooltip: '',
                                     onPressed: () {
                                       Navigator.push(
                                           context,
@@ -62,7 +64,7 @@ class RecipesListScreen extends StatelessWidget {
                                                           Recipe(id:0, chefId: status.chefId, name: null, details: null),
                                                       imageInput: null)));
                                     }),
-                                Text('add Recipe'),
+                                CTransText('add Recipe').textWidget(),
                               ],
                             );
                           },
@@ -76,7 +78,7 @@ class RecipesListScreen extends StatelessWidget {
                               children: [
                                 IconButton(
                                     icon: Icon(Icons.account_box),
-                                    tooltip: 'Manage Account',
+                                    tooltip: '',
                                     onPressed: () {
                                       Navigator.push(
                                           context,
@@ -86,14 +88,14 @@ class RecipesListScreen extends StatelessWidget {
                                                       chefId: status.chefId)));
                                     }),
                                 status.isLoggedIn
-                                    ? Text('Account')
-                                    : Text('Log in')
+                                    ? CTransText('Account').textWidget()
+                                    : CTransText('Log in').textWidget()
                               ]);
                         })
                       ]),
                 ));
           } else {
-            return CircularProgressIndicator();
+            return CoalamProgress();
           }
         });
   }
@@ -114,7 +116,7 @@ class RecipeElement extends StatelessWidget {
         Expanded(
           child: TextButton(
             child:
-                Text('View details for ' + recipe.details!['recipeName']),
+                CTransText('View details for ' + recipe.details!['recipeName']).textWidget(),
             onPressed: () {
               Navigator.pushNamed(
                 context,

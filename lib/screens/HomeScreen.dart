@@ -1,3 +1,4 @@
+import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton(
-                child: Text("What's cooking ? "),
+                child: CTransText("What's cooking ? ").textWidget(),
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
@@ -34,8 +35,8 @@ class HomeScreen extends StatelessWidget {
                   var status = context.read<GlobalState>();
                 return TextButton(
                   child:
-                      Text("Are logged-in?: " + status.isLoggedIn.toString() +
-                          "\n and your id is: " +status.chefId.toString() ),
+                      CTransText("Are logged-in?: " + status.isLoggedIn.toString() +
+                          "\n and your id is: " +status.chefId.toString() ).textWidget(),
                   onPressed: () {
                     status.toggleLogIn();
                   },

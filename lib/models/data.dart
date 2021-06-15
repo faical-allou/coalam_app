@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
-import 'globals.dart' as globals;
+import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
 
 class Recipe {
@@ -88,7 +88,7 @@ Future<Chef> fetchChef(id) async {
   }
 }
 
-void deleteRecipe(id) async {
+void deleteRecipe(id,function) async {
   final response =
      await  http.get(Uri.parse(globals.endpoint+'/delete_recipe/' + id.toString()),
        headers: {HttpHeaders.authorizationHeader: globals.appKey,},
@@ -100,7 +100,7 @@ void deleteRecipe(id) async {
   }
 }
 
-void deleteChef(id) async {
+void deleteChef(id, function) async {
   final response =
   await  http.get(Uri.parse(globals.endpoint+'/delete_chef/' + id.toString()),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
@@ -114,33 +114,6 @@ void deleteChef(id) async {
 
 
 
-Future<int?> getCountPictures(id) async {
-  final response =
-    await http.get(Uri.parse(globals.endpoint+'/get_image/' + id.toString() + '/count'),
-      headers: {HttpHeaders.authorizationHeader: globals.appKey,},
-    );
-  if (response.statusCode == 200) {
-      final count = jsonDecode(response.body);
-      return count['data'];
-  }
-  else {
-    throw Exception('Failed to load count');
-  }
-}
-
-Future<List<dynamic>?> getNextEvents(chefId,id) async {
-  final response =
-   await http.get(Uri.parse(globals.endpoint+'/get_schedule/' + chefId.toString() + '/'+id.toString()),
-     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
-   );
-  if (response.statusCode == 200) {
-      final output = jsonDecode(response.body);
-      return output['items'];
-  }
-  else {
-    throw Exception('Failed to load events');
-  }
-}
 
 asyncRecipeUpload(
     int? recipeId,
@@ -204,48 +177,3 @@ asyncChefAccountUpload(
   var responseString = String.fromCharCodes(responseData);
   return responseString;
 }
-
-imageFetcher(String imageLinkToFetch, double h){
-  return Image.network(
-    globals.endpoint + imageLinkToFetch,
-    height: h,
-    headers: {'connection': 'Keep-Alive'},
-  );
-}
-
-createEvent(int? chefId, int recipeId, String start, String end, String description, Function updateScreen) async {
-  var request = http.MultipartRequest("POST", Uri.parse(
-      globals.endpoint + "/add_event/" + chefId.toString() + "/" +
-          recipeId.toString()),);
-  request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
-  request.fields["eventStart"] = start;
-  request.fields["eventEnd"] = end;
-  request.fields["eventDescription"] = description;
-  var response = await request.send();
-
-  //Get the response from the server
-  var responseData = await response.stream.toBytes();
-  var responseString = String.fromCharCodes(responseData);
-  if (response.statusCode == 200) {
-    updateScreen(() {});
-    return 'event created';
-  }
-  else {
-    throw Exception('Failed to create event');
-  }
-}
-
-deleteEvent(String eventId,  Function updateScreen ) async {
-  final response =
-  await http.get(Uri.parse(globals.endpoint+'/delete_event/' + eventId.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
-  );
-  if (response.statusCode == 200) {
-    updateScreen((){});
-    return 'event deleted';
-  }
-  else {
-    throw Exception('Failed to delete event');
-  }
-}
-

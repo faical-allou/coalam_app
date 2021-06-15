@@ -1,4 +1,4 @@
-import 'package:coalam_app/models.dart';
+import 'package:coalam_app/models/data.dart';
 import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -92,7 +92,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 height: 200.0,
                 child: Center(
                   child: image == null
-                      ? Text('Choose the main image')
+                      ? CTransText('Choose the main image').textWidget()
                       : imageFile == null
                         ? image
                         : Image(image: FileImage(imageFile!))
@@ -104,7 +104,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                   child: FloatingActionButton(
                     heroTag: "camera",
                     onPressed: getImageFromCamera,
-                    tooltip: 'Pick Image',
+                    tooltip: CTransText('Pick Image').value(),
                     child: Icon(Icons.add_a_photo),
                   ),
                 ),
@@ -113,7 +113,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                   child: FloatingActionButton(
                     heroTag: "gallery",
                     onPressed: getImageFromGallery,
-                    tooltip: 'Pick Image',
+                    tooltip: CTransText('Pick Image').value(),
                     child: Icon(Icons.add_photo_alternate),
                   ),
                 )
@@ -124,25 +124,25 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
             CoalamTextInputField(
                 initialTextRecipeName,
                 recipeInputName,
-                Text('input a name').data, 90, 1, 30),
+                CTransText('input a name').value(), 90, 1, 30),
             CoalamTextInputField(
                 initialTextRecipeDescription,
                 recipeInputDescription,
-                Text('description').data, 160, 4, 200),
+                CTransText('description').value(), 160, 4, 200),
             CoalamTextInputField(
                 initialTextIngredients,
                 recipeInputIngredients,
-                Text('ingredients').data, 120, 10, 200),
+                CTransText('ingredients').value(), 120, 10, 200),
             CoalamTextInputField(
                 initialTextTools,
                 recipeInputTools,
-                Text("tools").data, 120, 10, 200),
+                CTransText("tools").value(), 120, 10, 200),
 
             Column(children: [
               ElevatedButton(
           child: recipeId == 0
-              ? Text("Create")
-              : Text("Update"),
+              ? CTransText("Create").textWidget()
+              : CTransText("Update").textWidget(),
           onPressed: () {
             isValidRecipe(recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
@@ -152,17 +152,22 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
                 chefId, imageFile );
-            showAlertDialogEdit(context);
+            showAlertDialogConfirm(context,"Thank you for your submission","Now you're cooking","Continue",);
           }()
-          : showAlertDialogValidation(context);
+          : showAlertDialogValidation(context,"Oops something is missing","Make sure all fields are filled and attach a picture", "Go back", );
           },
         ), recipeId != 0
            ? ElevatedButton(
-              child: Text("Delete"),
+              child: CTransText("Delete").textWidget(),
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,),
               onPressed: () {
-                showAlertDialogDelete(context, recipeId);
+                showAlertDialogDelete(context, null,recipeId,deleteRecipe,
+                    "Are you sure you want to delete?",
+                    "There's no turning back!",
+                    "yes delete",
+                    "cancel",
+                     true);
               },
             )
             : Container(),
@@ -172,91 +177,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   }
 }
 
-showAlertDialogEdit(BuildContext context) {
 
-  Widget continueButton = TextButton(
-    child: Text("Continue"),
-    onPressed:  () {
-      int count = 0;
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Thank you for your submission"),
-    content: Text("Now you're cooking"),
-    actions: [
-      continueButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showAlertDialogDelete(BuildContext context, recipeId) {
-
-  Widget continueButton = TextButton(
-    child: Text("yes, delete"),
-    onPressed:  () {
-      deleteRecipe(recipeId);
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    },
-  );
-
-  Widget cancelButton = TextButton(
-    child: Text("cancel"),
-    onPressed:  () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Are you sure you want to delete?"),
-    content: Text("There's no turning back!"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showAlertDialogValidation(BuildContext context) {
-
-  Widget cancelButton = TextButton(
-    child: Text("Go back"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Oops something is missing"),
-    content: Text("Make sure all fields are filled and attach a picture"),
-    actions: [
-      cancelButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
 
 bool isValidRecipe(id1, text1, text2,
 text3, text4, id2, image){

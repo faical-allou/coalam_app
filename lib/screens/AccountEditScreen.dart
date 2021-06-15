@@ -1,4 +1,4 @@
-import 'package:coalam_app/models.dart';
+import 'package:coalam_app/models/data.dart';
 import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
+import 'package:coalam_app/models/images.dart';
 
 class AccountEditScreen extends StatefulWidget {
   final int? chefId;
@@ -90,7 +91,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                             height: 200.0,
                             child: Center(
                                 child: image == null
-                                    ? Text('Choose the main image')
+                                    ? CTransText('Choose the main image').textWidget()
                                     : imageFile == null
                                         ? image
                                         : Image(image: FileImage(imageFile!))),
@@ -121,11 +122,11 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                   )),
                 ),
                 CoalamTextInputField(initialTextChefName, chefInputName,
-                    Text('input a name').data, 90, 1, 30),
+                    CTransText('input a name').value(), 90, 1, 30),
                 CoalamTextInputField(
                     initialTextChefDescription,
                     chefInputDescription,
-                    Text('description').data,
+                    CTransText('description').value(),
                     160,
                     4,
                     200),
@@ -134,10 +135,13 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                     var status = context.read<GlobalState>();
                     return Column(children: [
                       ElevatedButton(
-                        child: chefId == 0 ? Text("Create") : Text("Update"),
+                        child: chefId == 0
+                            ? CTransText("Create").textWidget()
+                            : CTransText("Update").textWidget(),
                         onPressed: () {
                           if (isValidAccount(chefInputName.text,
-                              chefInputDescription.text, chefId, image ?? imageFile)) {
+                              chefInputDescription.text, chefId, image ?? imageFile))
+                          {
                             asyncChefAccountUpload(
                                     chefInputName.text,
                                     chefInputDescription.text,
@@ -148,23 +152,26 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                           jsonDecode(textResponse)['chefId'])),
                                       status.logIn(),
                                     });
-                            showAlertDialog(context);
+                            showAlertDialogConfirm(context, "Thank you for joining?","Ready to cook?","Continue");
                           } else {
-                            showAlertDialogValidation(context);
+                            showAlertDialogValidation(context, "Oops something is missing","Make sure all fields are filled and attach a picture", "Go back",);
                           }
                         },
                       ),
                       chefId != 0
                           ? ElevatedButton(
-                              child: Text("Delete"),
+                              child: CTransText("Delete").textWidget(),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.red,
                               ),
                               onPressed: () {
-                                showAlertDialogDelete(context, chefId);
+                                showAlertDialogDelete(context, null,chefId,deleteChef,
+                                    "Are you sure you want to delete?",
+                                    "There's no turning back!",
+                                    "yes delete",
+                                    "cancel",
+                                    true);
                                 status.logOut();
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
                               },
                             )
                           : Container()
@@ -174,94 +181,16 @@ class AccountEditScreenState extends State<AccountEditScreen> {
               ])),
             );
           } else {
-            return CircularProgressIndicator();
+            return CoalamProgress();
           }
         });
   }
 }
 
-showAlertDialog(BuildContext context) {
-  Widget continueButton = TextButton(
-    child: Text("Continue"),
-    onPressed: () {
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    },
-  );
 
-  AlertDialog alert = AlertDialog(
-    title: Text("Thank you for joining?"),
-    content: Text("Ready to cook?"),
-    actions: [
-      continueButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showAlertDialogDelete(BuildContext context, chefId) {
-  Widget continueButton = TextButton(
-    child: Text("yes, delete"),
-    onPressed: () {
-      deleteChef(chefId);
-      imageCache!.clear();
-    },
-  );
-
-  Widget cancelButton = TextButton(
-    child: Text("cancel"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Are you sure you want to delete your account?"),
-    content: Text("It will be gone forever!"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showAlertDialogValidation(BuildContext context) {
-  Widget cancelButton = TextButton(
-    child: Text("Go back"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Oops something is missing"),
-    content: Text("Make sure all fields are filled and attach a picture"),
-    actions: [
-      cancelButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
 
 bool isValidAccount(text1, text2, id, image) {
   [text1, text2, id, image].forEach(print);
-  return (text1 != null) & (text2 != null) & (id != null) & (image != null);
+  return (text1 != null) & (text1.length > 2) & (text2 != null)  & (text2.length > 2)
+  & (id != null) & (image != null);
 }

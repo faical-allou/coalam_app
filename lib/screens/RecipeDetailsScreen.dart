@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:coalam_app/models.dart';
+import 'package:coalam_app/models/data.dart';
 import 'package:coalam_app/main.dart';
+import 'package:coalam_app/models/events.dart';
+import 'package:coalam_app/models/images.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
@@ -62,7 +64,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     )),
                               );
                             } else {
-                              return CircularProgressIndicator();
+                              return CoalamProgress();
                             }
                           }),
                       CoalamCard(
@@ -71,8 +73,9 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(right: 20.0),
-                                child: Text('Chef: \n' +
-                                    snapshot.data!.details!['chefName']),
+                                child: CTransText('Chef: \n' +
+                                        snapshot.data!.details!['chefName'])
+                                    .textWidget(),
                               ),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
@@ -113,34 +116,65 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     i += 1)
                                   CoalamCard(Row(children: [
                                     Expanded(
-                                        child: Text(DateFormat('d-MMM-y HH:mm')
-                                            .format(DateTime.parse(
-                                                    snapshot2.data![i]['start']
-                                                        ['dateTime'])
-                                                .toLocal())
-                                            .toString())),
+                                        child: CTransText(
+                                                DateFormat('d-MMM-y HH:mm')
+                                                    .format(DateTime.parse(
+                                                            snapshot2.data![i]
+                                                                    ['start']
+                                                                ['dateTime'])
+                                                        .toLocal())
+                                                    .toString())
+                                            .textWidget()),
                                     Expanded(
-                                        child: Text(snapshot2.data![i]
-                                                ['description'] ??
-                                            "")),
+                                        child: CTransText(snapshot2.data![i]
+                                                    ['description'] ??
+                                                "")
+                                            .textWidget()),
                                     TextButton(
-                                      child: Text('check it'),
+                                      child:
+                                          CTransText('check it').textWidget(),
                                       onPressed: () => {
                                         launch(
                                             snapshot2.data![i]['hangoutLink'])
                                       },
                                     ),
-                                    _getDeleteLink(snapshot2.data![i]['id'], setState)
-
+                                    Consumer<GlobalState>(
+                                        builder: (context, status, child) {
+                                      var status = context.read<GlobalState>();
+                                      if (!status.isLoggedIn) {
+                                        return Container();
+                                      } else {
+                                        return TextButton.icon(
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.red,
+                                          ),
+                                          icon: Icon(Icons.delete),
+                                          label: Text(''),
+                                          onPressed: () => {
+                                            showAlertDialogDelete(
+                                                context,
+                                                setState,
+                                                snapshot2.data![i]['id'],
+                                                deleteEvent,
+                                                "Are you sure you want to delete?",
+                                                "There's no turning back!",
+                                                "yes, delete",
+                                                "cancel",
+                                            false),
+                                          },
+                                        );
+                                      }
+                                    })
                                   ])),
                               ]);
                             } else {
-                              return Text('fetching events');
+                              return CTransText('fetching events').textWidget();
                             }
                           }),
                       Consumer<GlobalState>(builder: (context, status, child) {
                         var status = context.read<GlobalState>();
-                        if (!status.isLoggedIn || snapshot.data!.chefId != status.chefId) {
+                        if (!status.isLoggedIn ||
+                            snapshot.data!.chefId != status.chefId) {
                           return Container();
                         } else {
                           return CoalamCard(
@@ -152,11 +186,11 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                   Container(
                                     width: 100,
                                     child: TextButton(
-                                      child: Text(
+                                      child: CTransText(
                                         DateFormat("d-MMM-y @ HH:mm")
                                             .format(selectedDateTime)
                                             .toString(),
-                                      ),
+                                      ).textWidget(),
                                       onPressed: () {
                                         DatePicker.showDateTimePicker(context,
                                             showTitleActions: true,
@@ -180,7 +214,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                       child: CoalamTextInputField(
                                           "",
                                           descriptionInput,
-                                          Text('Title').data,
+                                          CTransText('Title').value(),
                                           60,
                                           1,
                                           30)),
@@ -188,7 +222,8 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.green,
                                     ),
-                                    child: Text('+ add event'),
+                                    child:
+                                        CTransText('+ add event').textWidget(),
                                     onPressed: () {
                                       var start =
                                           DateFormat("yyyy-MM-ddTHH:mm:ss")
@@ -213,15 +248,24 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                                   end,
                                                   descriptionInput.text,
                                                   setState);
-                                              showAlertDialogValidation(context,
-                                                  Text("Nice !!").data ?? "",
-                                                  Text("Your event will be live in a moment").data ?? "",
-                                                  Text("Go Back").data ?? "");
+                                              showAlertDialogValidation(
+                                                  context,
+                                                  CTransText("Nice !!").value(),
+                                                  CTransText(
+                                                          "Your event will be live in a moment")
+                                                      .value(),
+                                                  CTransText("Go Back")
+                                                      .value());
                                             }()
-                                          : showAlertDialogValidation(context,
-                                        Text("Oops something is missing").data ?? "",
-                                        Text("Make sure you have a description").data ?? "",
-                                        Text("Go Back").data ?? "");
+                                          : showAlertDialogValidation(
+                                              context,
+                                              CTransText(
+                                                      "Oops something is missing")
+                                                  .value(),
+                                              CTransText(
+                                                      "Make sure you have a description")
+                                                  .value(),
+                                              CTransText("Go Back").value());
                                     },
                                   ),
                                 ]),
@@ -229,7 +273,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                         }
                       }),
                       TextButton(
-                        child: Text('back!'),
+                        child: CTransText('back!').textWidget(),
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -241,7 +285,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     FloatingActionButtonLocation.endTop,
                 floatingActionButton: _getFAB(snapshot.data, mainImage));
           } else {
-            return CircularProgressIndicator();
+            return CoalamProgress();
           }
         });
   }
@@ -280,24 +324,6 @@ Widget _getFAB(Recipe? inputRecipe, Image inputImage) {
     }
   });
 }
-Widget _getDeleteLink(id, function) {
-  return Consumer<GlobalState>(builder: (context, status, child) {
-    var status = context.read<GlobalState>();
-    if (!status.isLoggedIn) {
-      return Container();
-    } else { return
-      TextButton.icon(
-        style: TextButton.styleFrom(
-          primary: Colors.red,
-        ),
-        icon:Icon(Icons.delete),
-        label: Text(''),
-        onPressed: () =>
-        { showAlertDialogDelete(context, id, function),
-        },
-      );
-  }
-  });}
 
 bool isValidEvent(
     int? int1, int? int2, String? text1, String? text2, String? text3) {
@@ -310,63 +336,4 @@ bool isValidEvent(
       (text3 != null) &
       (text3!.length >= 3);
   return test;
-}
-
-showAlertDialogValidation(BuildContext context, String text1, String text2, String text3) {
-  Widget cancelButton = TextButton(
-    child: Text(text3),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text(text1),
-    content: Text(text2),
-    actions: [
-      cancelButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showAlertDialogDelete(BuildContext context, eventId, function) {
-
-  Widget continueButton = TextButton(
-    child: Text("yes, delete"),
-    onPressed:  () {
-      deleteEvent(eventId, function);
-      Navigator.pop(context);
-    },
-  );
-
-  Widget cancelButton = TextButton(
-    child: Text("cancel"),
-    onPressed:  () {
-      Navigator.pop(context);
-    },
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Are you sure you want to delete?"),
-    content: Text("There's no turning back!"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
