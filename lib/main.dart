@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
 import 'package:coalam_app/screens/HomeScreen.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
 import 'package:coalam_app/screens/RecipeEditScreen.dart';
 import 'package:coalam_app/screens/AccountEditScreen.dart';
+import './globals.dart' as globals;
+
 
 void main() {
   runApp(
@@ -81,7 +84,7 @@ class GlobalState with ChangeNotifier {
   void toggleLogIn() {
     isLoggedIn = !isLoggedIn;
     notifyListeners();
-    isLoggedIn ? setChefId(5) : setChefId(0);
+    isLoggedIn ? setChefId(globals.chefId) : setChefId(0);
   }
   void setChefId(int id){
     chefId = id;

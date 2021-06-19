@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
 import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 
 imageFetcher(String imageLinkToFetch, double h){
   return Image.network(
