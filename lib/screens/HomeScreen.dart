@@ -30,18 +30,18 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-              Consumer<GlobalState>(
+/*              Consumer<GlobalState>(
                   builder: (context, status, child) {
                   var status = context.read<GlobalState>();
                 return TextButton(
-                  child:
+                 child:
                       CTransText("Are logged-in?: " + status.isLoggedIn.toString() +
                           "\n and your id is: " +status.chefId.toString() ).textWidget(),
                   onPressed: () {
                     status.toggleLogIn();
                   },
-                );
-              })
+              );
+              }) */
             ]),
       ),
     );

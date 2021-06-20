@@ -70,7 +70,7 @@ class UnknownScreen extends StatelessWidget {
 class GlobalState with ChangeNotifier {
 
   bool isLoggedIn = false;
-  int chefId = 1;
+  int chefId = 0;
   String chefName = '';
 
   void logOut() {

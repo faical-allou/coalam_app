@@ -22,7 +22,7 @@ class RecipesListScreen extends StatelessWidget {
                     children: [
                       for (var i = 0; i <= snapshot.data!.length - 1; i += 1)
                         RecipeElement(snapshot.data![i], i + 1),
-                      Consumer<GlobalState>(builder: (context, status, child) {
+ /*                     Consumer<GlobalState>(builder: (context, status, child) {
                         var status = context.read<GlobalState>();
                         return TextButton(
                           child: CTransText("Are logged-in?: " +
@@ -36,7 +36,7 @@ class RecipesListScreen extends StatelessWidget {
                             status.toggleLogIn();
                           },
                         );
-                      })
+                      }) */
                     ],
                   ),
                 ),
@@ -47,13 +47,16 @@ class RecipesListScreen extends StatelessWidget {
                         Consumer<GlobalState>(
                           builder: (context, status, child) {
                             var status = context.read<GlobalState>();
-                            return Column(
+                            return
+
+                            Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                IconButton(
+                                status.isLoggedIn
+                                ? Column(children:[IconButton(
                                     icon: Icon(Icons.add_box),
-                                    tooltip: '',
+
                                     onPressed: () {
                                       Navigator.push(
                                           context,
@@ -64,9 +67,11 @@ class RecipesListScreen extends StatelessWidget {
                                                           Recipe(id:0, chefId: status.chefId, name: null, details: null),
                                                       imageInput: null)));
                                     }),
-                                CTransText('add Recipe').textWidget(),
+                                CTransText('add Recipe').textWidget(),])
+                                    : Container()
                               ],
                             );
+
                           },
                         ),
                         Consumer<GlobalState>(
@@ -78,7 +83,7 @@ class RecipesListScreen extends StatelessWidget {
                               children: [
                                 IconButton(
                                     icon: Icon(Icons.account_box),
-                                    tooltip: '',
+
                                     onPressed: () {
                                       Navigator.push(
                                           context,
