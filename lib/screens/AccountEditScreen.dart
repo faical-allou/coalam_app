@@ -153,7 +153,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                             : CTransText("Update").textWidget(),
                         onPressed: () {
                           if (isValidAccount(chefInputName.text,
-                              chefInputDescription.text, chefId, image ?? imageFile))
+                              chefInputDescription.text, chefId, image ?? imageBytes))
                           {
                             asyncChefAccountUpload(
                                     chefInputName.text,

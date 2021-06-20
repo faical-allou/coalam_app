@@ -172,7 +172,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
           onPressed: () {
             isValidRecipe(recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
-                chefId, image ?? imageFilePath )
+                chefId, image ?? imageBytes )
             ? () {
               imageCache!.clear();
               asyncRecipeUpload(
