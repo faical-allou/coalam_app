@@ -143,8 +143,6 @@ asyncRecipeUpload(
 
   //var pic = await http.MultipartFile.fromPath("image1", filepath);
   var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
-  print('ready to send');
-  print(bytes);
   //add multipart to request
   request.files.add(pic2);
 

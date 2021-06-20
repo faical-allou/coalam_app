@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:coalam_app/models/data.dart';
 import 'package:coalam_app/screens/Templates.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
 
@@ -55,7 +52,6 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   Future getImageFromGallery2() async {
 
     FilePickerResult? result = await FilePicker.platform.pickFiles(withData: true);
-    print('filepick');
     if(result != null) {
       imageCache!.clear();
       setState(() {
@@ -73,7 +69,6 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     imageCache!.clear();
-    print('camerapick');
     setState(() {
       if (pickedFile != null) {
           imageFilePath = pickedFile.path;

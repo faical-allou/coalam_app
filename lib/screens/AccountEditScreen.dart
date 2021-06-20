@@ -203,7 +203,6 @@ class AccountEditScreenState extends State<AccountEditScreen> {
 
 
 bool isValidAccount(text1, text2, id, image) {
-  [text1, text2, id, image].forEach(print);
   return (text1 != null) & (text1.length > 2) & (text2 != null)  & (text2.length > 2)
   & (id != null) & (image != null);
 }
