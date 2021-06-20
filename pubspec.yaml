@@ -35,6 +35,8 @@ dependencies:
   url_launcher: 6.0.4
   intl: any
   image_picker: 0.7.5
+  file_picker: 3.0.2
+  http_parser: 4.0.0
   flutter_uploader: 1.2.1
   flutter_datetime_picker:
     git:

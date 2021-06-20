@@ -7,6 +7,10 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:coalam_app/main.dart';
 import 'package:coalam_app/models/images.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+
+import 'dart:typed_data';
 
 class AccountEditScreen extends StatefulWidget {
   final int? chefId;
@@ -24,23 +28,30 @@ class AccountEditScreenState extends State<AccountEditScreen> {
 
   Image? image;
   File? imageFile;
+  Uint8List? imageBytes;
+  String? imageFilePath;
 
   String? initialTextChefName = "";
   String? initialTextChefDescription = "";
 
   final picker = ImagePicker();
 
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        imageFile = File(pickedFile.path);
-        image = Image.file(File(pickedFile.path));
+  Future getImageFromGallery2() async {
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles(withData: true);
+
+    if(result != null) {
+      setState(() {
+        PlatformFile file = result.files.first;
+        imageFilePath = file.path;
+        image = Image.memory(file.bytes!);
+        imageBytes = file.bytes;
         imageCache!.clear();
-      } else {
-        print('No image selected.');
-      }
-    });
+      });
+
+    } else {
+      // User canceled the picker
+    }
   }
 
   Future getImageFromCamera() async {
@@ -49,6 +60,8 @@ class AccountEditScreenState extends State<AccountEditScreen> {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
         image = Image(image: FileImage(imageFile!));
+        var _imageFile = File(pickedFile.path);
+        imageBytes = _imageFile.readAsBytesSync();
         imageCache!.clear();
       } else {
         print('No image selected.');
@@ -59,8 +72,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
   @override
   Widget build(BuildContext context) {
     chefId = widget.chefId;
-    image = imageFetcher('/get_image/' + widget.chefId.toString(), 200);
-
+    Image initialImage = imageFetcher('/get_image/' + widget.chefId.toString(), 200);
     return FutureBuilder<Chef>(
         future: fetchChef(widget.chefId),
         builder: (context, AsyncSnapshot<Chef> snapshot) {
@@ -91,15 +103,16 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                             height: 200.0,
                             child: Center(
                                 child: image == null
-                                    ? CTransText('Choose the main image').textWidget()
-                                    : imageFile == null
-                                        ? image
-                                        : Image(image: FileImage(imageFile!))),
+                                  ? initialImage
+                                    : image
+                                       ),
                           ),
                           Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Padding(
+                                kIsWeb
+                                ? Container()
+                                : Padding(
                                   padding: EdgeInsets.all(10.0),
                                   child: FloatingActionButton(
                                     heroTag: "camera",
@@ -112,7 +125,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                   padding: EdgeInsets.all(10.0),
                                   child: FloatingActionButton(
                                     heroTag: "gallery",
-                                    onPressed: getImageFromGallery,
+                                    onPressed: getImageFromGallery2,
                                     tooltip: 'Pick Image',
                                     child: Icon(Icons.add_photo_alternate),
                                   ),
@@ -146,7 +159,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     chefInputName.text,
                                     chefInputDescription.text,
                                     chefId,
-                                    imageFile)
+                                    imageFile, imageBytes)
                                 .then((textResponse) => {
                                       status.setChefId(int.parse(
                                           jsonDecode(textResponse)['chefId'])),

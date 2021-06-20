@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
 import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
 
 class Recipe {
   final Map<String, dynamic>? details;
@@ -122,7 +125,8 @@ asyncRecipeUpload(
     String ingredients,
     String tools,
     int? chefId,
-    File? file
+    String? filepath,
+    Uint8List? bytes
     ) async{
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_recipe/"),);
@@ -136,12 +140,14 @@ asyncRecipeUpload(
   request.fields["tools"] = tools;
   request.fields["chefId"] = chefId.toString();
 
-  //create multipart using filepath, string or bytes
-  if (file != null) {
-    var pic = await http.MultipartFile.fromPath("image1", file.path);
-    //add multipart to request
-    request.files.add(pic);
-  }
+
+  //var pic = await http.MultipartFile.fromPath("image1", filepath);
+  var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
+  print('ready to send');
+  print(bytes);
+  //add multipart to request
+  request.files.add(pic2);
+
   var response = await request.send();
 
   //Get the response from the server
@@ -153,7 +159,8 @@ asyncChefAccountUpload(
     String chefName,
     String chefDescription,
     int? chefId,
-    File? file
+    File? file,
+    Uint8List? bytes
     ) async {
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_account/"),);
@@ -165,11 +172,9 @@ asyncChefAccountUpload(
   request.fields["chefId"] = chefId.toString();
 
   //create multipart using filepath, string or bytes
-  if (file != null) {
-    var pic = await http.MultipartFile.fromPath("image1", file.path);
-    //add multipart to request
-    request.files.add(pic);
-  }
+  var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
+  //add multipart to request
+  request.files.add(pic2);
   var response = await request.send();
 
   //Get the response from the server
