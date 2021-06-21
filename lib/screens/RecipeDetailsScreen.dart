@@ -38,7 +38,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
           if (snapshot.hasData) {
             final chefId = snapshot.data!.chefId;
             return Scaffold(
-                appBar: AppBar(title: Text(snapshot.data!.name ?? '')),
+                appBar: AppBar(title: Center(child:Text(snapshot.data!.name ?? ''))),
                 body: Container(
                   child: ListView(
                     children: [

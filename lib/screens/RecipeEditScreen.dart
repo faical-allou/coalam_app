@@ -101,7 +101,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
     chefId = widget.recipe!.chefId;
 
     return Scaffold(
-      appBar: AppBar(title: CTransText('Edit your recipe').textWidget()),
+      appBar: AppBar(title: Center(child:CTransText('Edit your recipe').textWidget())),
       body: Container(
           child: ListView(children: [
         Padding(

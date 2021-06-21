@@ -86,7 +86,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                   TextEditingController(text: initialTextChefDescription);
             }
             return Scaffold(
-              appBar: AppBar(title: CTransText('Edit your Account').textWidget()),
+              appBar: AppBar(title: Center(child:CTransText('Edit your Account').textWidget())),
               body: Container(
                   child: ListView(children: [
                 Padding(
