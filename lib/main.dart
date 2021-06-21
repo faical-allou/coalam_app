@@ -51,6 +51,27 @@ class MyApp extends StatelessWidget {
 
         return MaterialPageRoute(builder: (context) => UnknownScreen());
       },
+      theme: ThemeData(
+          primaryColor: Colors.brown[900],
+          accentColor: Colors.brown[500],
+          // text button theme
+          textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                textStyle: TextStyle(
+                    foreground: Paint()..color = Colors.blue[900]!,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              )),
+          // elevated button theme
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  primary: Colors.lightGreen[900], // background color
+                  textStyle:
+                  TextStyle(fontSize: 18, fontWeight: FontWeight.bold )),
+          )),
     );
   }
 }
