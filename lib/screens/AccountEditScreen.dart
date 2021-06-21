@@ -73,12 +73,17 @@ class AccountEditScreenState extends State<AccountEditScreen> {
   Widget build(BuildContext context) {
     chefId = widget.chefId;
     Image initialImage = imageFetcher('/get_image/' + widget.chefId.toString(), 200);
-    return FutureBuilder<Chef>(
+    return
+      Consumer<GlobalState>(
+          builder: (context, status, child) {
+      var status = context.read<GlobalState>();
+      return
+      FutureBuilder<Chef>(
         future: fetchChef(widget.chefId),
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
             if (!["", 0, null].contains(widget.chefId)) {
-              initialTextChefName = snapshot.data!.name;
+              initialTextChefName = status.currentUser.toString(); //snapshot.data!.name;
               initialTextChefDescription = snapshot.data!.description;
 
               chefInputName = TextEditingController(text: initialTextChefName);
@@ -196,7 +201,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
           } else {
             return CoalamProgress();
           }
-        });
+        });});
   }
 }
 

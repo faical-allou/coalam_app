@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "655366591057",
+    "project_id": "coalam-app",
+    "storage_bucket": "coalam-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655366591057:android:812ed61876e58c51cd9e70",
+        "android_client_info": {
+          "package_name": "com.alamaison.coalam_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655366591057-aahaeggkcovlp37ur839omd28nsluna7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alamaison.coalam_app",
+            "certificate_hash": "e0fbb8cd75402f58496a6caeaaebdfc6e0b64df2"
+          }
+        },
+        {
+          "client_id": "655366591057-iu7704rcn1bvank1g0gs1l9lu3cpdpac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdp3qmFJadYoCSdXIiM5p9lUBdEhemoWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655366591057-iu7704rcn1bvank1g0gs1l9lu3cpdpac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

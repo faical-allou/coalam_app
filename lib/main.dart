@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:coalam_app/screens/HomeScreen.dart';
+import 'package:coalam_app/screens/SigninDemo.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
 import 'package:coalam_app/screens/RecipeEditScreen.dart';
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  primary: Colors.blue[900], // background color
+                  primary: Colors.blue[600], // background color
                   textStyle:
                   TextStyle(fontSize: 18, fontWeight: FontWeight.bold )),
           )),
@@ -93,6 +94,12 @@ class GlobalState with ChangeNotifier {
   bool isLoggedIn = false;
   int chefId = 0;
   String chefName = '';
+  GoogleSignInAccount? currentUser;
+
+  void updateUser(GoogleSignInAccount? user) {
+    currentUser = user;
+    notifyListeners();
+  }
 
   void logOut() {
     isLoggedIn = false;
