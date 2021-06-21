@@ -86,7 +86,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                   TextEditingController(text: initialTextChefDescription);
             }
             return Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(title: CTransText('Edit your Account').textWidget()),
               body: Container(
                   child: ListView(children: [
                 Padding(
@@ -167,7 +167,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     });
                             showAlertDialogConfirm(context, "Thank you for joining?","Ready to cook?","Continue");
                           } else {
-                            showAlertDialogValidation(context, "Oops something is missing","Make sure all fields are filled and attach a picture", "Go back",);
+                            showAlertDialogValidation(context, "Oops something is missing","Make sure all fields are filled, have more than 2 letters and attach a picture", "Go back",);
                           }
                         },
                       ),

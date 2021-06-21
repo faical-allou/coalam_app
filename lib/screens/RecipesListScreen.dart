@@ -16,7 +16,7 @@ class RecipesListScreen extends StatelessWidget {
         builder: (context, AsyncSnapshot<List<Recipe>> snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
-                appBar: AppBar(),
+                appBar: AppBar(title: CTransText('All the good stuff').textWidget()),
                 body: Align(
                   child: ListView(
                     children: [

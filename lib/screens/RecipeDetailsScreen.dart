@@ -38,7 +38,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
           if (snapshot.hasData) {
             final chefId = snapshot.data!.chefId;
             return Scaffold(
-                appBar: AppBar(),
+                appBar: AppBar(title: Text(snapshot.data!.name ?? '')),
                 body: Container(
                   child: ListView(
                     children: [
@@ -141,7 +141,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                     Consumer<GlobalState>(
                                         builder: (context, status, child) {
                                       var status = context.read<GlobalState>();
-                                      if (!status.isLoggedIn) {
+                                      if (!status.isLoggedIn || snapshot.data!.chefId != status.chefId) {
                                         return Container();
                                       } else {
                                         return TextButton.icon(

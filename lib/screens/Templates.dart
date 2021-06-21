@@ -80,7 +80,7 @@ class CoalamProgress extends StatelessWidget {
 }
 
 class CTransText {
-  String text;
+  final String text;
   CTransText(this.text);
 
   String value() {
@@ -89,6 +89,7 @@ class CTransText {
   Widget textWidget() {
     return Text(this.text);
   }
+
 }
 
 

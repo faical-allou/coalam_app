@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: CTransText('Hello Friend come in!').textWidget()),
       body: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
