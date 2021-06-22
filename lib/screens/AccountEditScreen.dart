@@ -83,9 +83,8 @@ class AccountEditScreenState extends State<AccountEditScreen> {
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
             if (!["", 0, null].contains(widget.chefId)) {
-              initialTextChefName = status.currentUser.toString(); //snapshot.data!.name;
+              initialTextChefName = snapshot.data!.name;
               initialTextChefDescription = snapshot.data!.description;
-
               chefInputName = TextEditingController(text: initialTextChefName);
               chefInputDescription =
                   TextEditingController(text: initialTextChefDescription);
