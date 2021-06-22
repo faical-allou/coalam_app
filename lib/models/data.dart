@@ -28,13 +28,15 @@ class Recipe {
 class Chef {
   final Map<String, dynamic>? details;
   final int? chefId;
+  final String? gId;
   final String? name;
   final String? description;
 
-  Chef({this.details,this.chefId,this.name,this.description});
+  Chef({this.details,this.chefId,this.name,this.description, this.gId});
 
   factory Chef.fromJson(Map<String, dynamic> json) {
     return Chef(
+      gId: json['gId'],
       details: json,
       chefId: json['chefId'],
       name: json['chefName'],
@@ -76,9 +78,15 @@ Future<Recipe> fetchRecipe(id) async {
   }
 }
 
-Future<Chef> fetchChef(id) async {
+Future<Chef> fetchChef(id, idType) async {
+  String lookup;
+  idType == 'coalam'
+  ? lookup = '/chef/'
+  : idType == 'google'
+    ? lookup = '/gchef/'
+    : throw Exception('wrong type');
   final response =
-  await http.get(Uri.parse(globals.endpoint+'/chef/' + id.toString()),
+  await http.get(Uri.parse(globals.endpoint + lookup + id.toString()),
     headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
@@ -157,6 +165,7 @@ asyncChefAccountUpload(
     String chefName,
     String chefDescription,
     int? chefId,
+    String gId,
     File? file,
     Uint8List? bytes
     ) async {
@@ -164,15 +173,18 @@ asyncChefAccountUpload(
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_account/"),);
   request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   //add text fields
-
+  request.fields["gId"] = gId;
   request.fields["chefName"] = chefName;
   request.fields["chefDescription"] = chefDescription;
   request.fields["chefId"] = chefId.toString();
-
-  //create multipart using filepath, string or bytes
-  var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
-  //add multipart to request
-  request.files.add(pic2);
+  if (bytes != null) {
+    //create multipart using filepath, string or bytes
+    var pic2 = http.MultipartFile.fromBytes(
+        'image1', bytes, filename: 'internalName',
+        contentType: new MediaType('image', 'jpeg'));
+    //add multipart to request
+    request.files.add(pic2);
+  }
   var response = await request.send();
 
   //Get the response from the server

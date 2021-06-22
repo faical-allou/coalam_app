@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:coalam_app/screens/HomeScreen.dart';
-import 'package:coalam_app/screens/SigninDemo.dart';
 import 'package:coalam_app/screens/RecipeDetailsScreen.dart';
 import 'package:coalam_app/screens/RecipesListScreen.dart';
 import 'package:coalam_app/screens/RecipeEditScreen.dart';
@@ -92,7 +91,7 @@ class UnknownScreen extends StatelessWidget {
 class GlobalState with ChangeNotifier {
 
   bool isLoggedIn = false;
-  int chefId = 0;
+  int? chefId = 0;
   String chefName = '';
   GoogleSignInAccount? currentUser;
 
@@ -103,6 +102,7 @@ class GlobalState with ChangeNotifier {
 
   void logOut() {
     isLoggedIn = false;
+    chefId = 0;
     notifyListeners();
   }
   void logIn() {

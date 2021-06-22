@@ -14,8 +14,10 @@ import 'dart:typed_data';
 
 class AccountEditScreen extends StatefulWidget {
   final int? chefId;
+  final String? gId;
+  final String? name;
 
-  const AccountEditScreen({Key? key, this.chefId}) : super(key: key);
+  const AccountEditScreen({Key? key, this.chefId, this.gId, this.name}) : super(key: key);
 
   State createState() => new AccountEditScreenState();
 }
@@ -23,8 +25,8 @@ class AccountEditScreen extends StatefulWidget {
 class AccountEditScreenState extends State<AccountEditScreen> {
   var chefInputName = TextEditingController();
   var chefInputDescription = TextEditingController();
-  int? chefId = 0;
-  var recipeId = 0;
+  int? chefId;
+  var recipeId;
 
   Image? image;
   File? imageFile;
@@ -37,9 +39,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
   final picker = ImagePicker();
 
   Future getImageFromGallery2() async {
-
     FilePickerResult? result = await FilePicker.platform.pickFiles(withData: true);
-
     if(result != null) {
       setState(() {
         PlatformFile file = result.files.first;
@@ -48,7 +48,6 @@ class AccountEditScreenState extends State<AccountEditScreen> {
         imageBytes = file.bytes;
         imageCache!.clear();
       });
-
     } else {
       // User canceled the picker
     }
@@ -72,6 +71,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
   @override
   Widget build(BuildContext context) {
     chefId = widget.chefId;
+    initialTextChefName = widget.name;
     Image initialImage = imageFetcher('/get_image/' + widget.chefId.toString(), 200);
     return
       Consumer<GlobalState>(
@@ -79,10 +79,10 @@ class AccountEditScreenState extends State<AccountEditScreen> {
       var status = context.read<GlobalState>();
       return
       FutureBuilder<Chef>(
-        future: fetchChef(widget.chefId),
+        future: fetchChef(widget.chefId, 'coalam'),
         builder: (context, AsyncSnapshot<Chef> snapshot) {
           if (snapshot.hasData) {
-            if (!["", 0, null].contains(widget.chefId)) {
+            if (widget.chefId != null) {
               initialTextChefName = snapshot.data!.name;
               initialTextChefDescription = snapshot.data!.description;
               chefInputName = TextEditingController(text: initialTextChefName);
@@ -157,16 +157,17 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                             : CTransText("Update").textWidget(),
                         onPressed: () {
                           if (isValidAccount(chefInputName.text,
-                              chefInputDescription.text, chefId, image ?? imageBytes))
+                              chefInputDescription.text, chefId))
                           {
                             asyncChefAccountUpload(
                                     chefInputName.text,
                                     chefInputDescription.text,
                                     chefId,
+                                    status.currentUser!.id,
                                     imageFile, imageBytes)
                                 .then((textResponse) => {
-                                      status.setChefId(int.parse(
-                                          jsonDecode(textResponse)['chefId'])),
+                                      status.setChefId(
+                                          jsonDecode(textResponse)['chefId']),
                                       status.logIn(),
                                     });
                             showAlertDialogConfirm(context, "Thank you for joining?","Ready to cook?","Continue");
@@ -188,6 +189,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     "yes delete",
                                     "cancel",
                                     true);
+                                imageCache!.clear();
                                 status.logOut();
                               },
                             )
@@ -206,7 +208,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
 
 
 
-bool isValidAccount(text1, text2, id, image) {
+bool isValidAccount(text1, text2, id) {
   return (text1 != null) & (text1.length > 2) & (text2 != null)  & (text2.length > 2)
-  & (id != null) & (image != null);
+  & (id != null) ;
 }
