@@ -46,3 +46,4 @@ app.*.map.json
 # Assets
 /assets
 lib/globals.dart
+.firebase/hosting.YnVpbGRcd2Vi.cache
