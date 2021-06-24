@@ -6,7 +6,7 @@ import '../globals.dart' as globals;
 Future<List<dynamic>?> getNextEvents(chefId,id) async {
   final response =
   await http.get(Uri.parse(globals.endpoint+'/get_schedule/' + chefId.toString() + '/'+id.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
     final output = jsonDecode(response.body);
@@ -21,7 +21,7 @@ createEvent(int? chefId, int recipeId, String start, String end, String descript
   var request = http.MultipartRequest("POST", Uri.parse(
       globals.endpoint + "/add_event/" + chefId.toString() + "/" +
           recipeId.toString()),);
-  request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
+  //request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   request.fields["eventStart"] = start;
   request.fields["eventEnd"] = end;
   request.fields["eventDescription"] = description;
@@ -42,7 +42,7 @@ createEvent(int? chefId, int recipeId, String start, String end, String descript
 deleteEvent(String eventId,  Function updateScreen ) async {
   final response =
   await http.get(Uri.parse(globals.endpoint+'/delete_event/' + eventId.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
     updateScreen((){});

@@ -16,7 +16,7 @@ imageFetcher(String imageLinkToFetch, double h){
 Future<int?> getCountPictures(id) async {
   final response =
   await http.get(Uri.parse(globals.endpoint+'/get_image/' + id.toString() + '/count'),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
     final count = jsonDecode(response.body);

@@ -85,9 +85,7 @@ class HomeScreenState extends State<HomeScreen> {
                                 child: CTransText("Sign in with Google")
                                     .textWidget(),
                                 onPressed: () async {
-                                  print(_currentUser);
                                   GoogleSignInAccount? _loggedInUser = await _signInUser();
-                                  print(_loggedInUser);
                                   Chef _chef = await fetchChef(_loggedInUser!.id, 'google');
                                   status.logIn();
                                   status.setChefId(_chef.chefId!);
@@ -115,8 +113,6 @@ class HomeScreenState extends State<HomeScreen> {
 
                                 },
                               ),
-                        Text(status.chefId.toString()),
-                        Text(_currentUser.toString())
                       ]));
             },
           )),

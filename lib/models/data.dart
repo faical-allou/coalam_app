@@ -49,7 +49,7 @@ class Chef {
 
 Future<List<Recipe>> fetchAllRecipes() async {
   final response = await http.get(Uri.parse(globals.endpoint+'/all'),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
 
   if (response.statusCode == 200) {
@@ -66,7 +66,7 @@ Future<List<Recipe>> fetchAllRecipes() async {
 Future<Recipe> fetchRecipe(id) async {
   final response =
   await http.get(Uri.parse(globals.endpoint+'/recipe/' + id.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
       Iterable l = jsonDecode(response.body);
@@ -87,7 +87,7 @@ Future<Chef> fetchChef(id, idType) async {
     : throw Exception('wrong type');
   final response =
   await http.get(Uri.parse(globals.endpoint + lookup + id.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
       Iterable l = jsonDecode(response.body);
@@ -102,7 +102,7 @@ Future<Chef> fetchChef(id, idType) async {
 void deleteRecipe(id,function) async {
   final response =
      await  http.get(Uri.parse(globals.endpoint+'/delete_recipe/' + id.toString()),
-       headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+       //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
      );
   if (response.statusCode == 200) {
   }
@@ -114,7 +114,7 @@ void deleteRecipe(id,function) async {
 void deleteChef(id, function) async {
   final response =
   await  http.get(Uri.parse(globals.endpoint+'/delete_chef/' + id.toString()),
-    headers: {HttpHeaders.authorizationHeader: globals.appKey,},
+    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
   );
   if (response.statusCode == 200) {
   }
@@ -138,7 +138,7 @@ asyncRecipeUpload(
     ) async{
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_recipe/"),);
-  request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
+  //request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   //add text fields
 
   request.fields["recipeId"] = recipeId.toString();
@@ -171,7 +171,8 @@ asyncChefAccountUpload(
     ) async {
   //create multipart request for POST or PATCH method
   var request = http.MultipartRequest("POST", Uri.parse(globals.endpoint+"/edit_account/"),);
-  request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
+  //request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
+
   //add text fields
   request.fields["gId"] = gId;
   request.fields["chefName"] = chefName;
