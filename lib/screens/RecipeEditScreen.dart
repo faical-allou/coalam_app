@@ -22,6 +22,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   var recipeInputTools = TextEditingController();
   int? chefId = 0;
   int? recipeId = 0;
+  String? chefName = "";
 
   Image? image;
   String? imageFilePath;
@@ -85,7 +86,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
   @override
   Widget build(BuildContext context) {
     if ( widget.recipe!.id != 0  ) {
-      initialTextRecipeName = widget.recipe!.details!['recipeName'];
+      initialTextRecipeName = widget.recipe!.details!['recipename'];
       initialTextRecipeDescription = widget.recipe!.details!['description'];
       initialTextIngredients = widget.recipe!.details!['ingredients'];
       initialTextTools = widget.recipe!.details!['tools'];
@@ -96,9 +97,10 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
       recipeInputTools = TextEditingController(text: initialTextTools);
 
 
-      recipeId = widget.recipe!.details!['recipeId'];
+      recipeId = widget.recipe!.details!['recipeid'];
     }
     chefId = widget.recipe!.chefId;
+    chefName = widget.recipe!.chefName;
 
     return Scaffold(
       appBar: AppBar(title: Center(child:CTransText('Edit your recipe').textWidget())),
@@ -178,8 +180,8 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
               asyncRecipeUpload(
                 recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
-                chefId, imageFilePath,imageBytes );
-            showAlertDialogConfirm(context,"Thank you for your submission","Now you're cooking","Continue",);
+                chefId, chefName, imageFilePath,imageBytes );
+              showAlertDialogValidation(context,"Thank you for your submission","Now you're cooking","Continue",);
           }()
           : showAlertDialogValidation(context,"Oops something is missing","Make sure all fields are filled and attach a picture", "Go back", );
           },
@@ -209,5 +211,5 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
 bool isValidRecipe(id1, text1, text2,
 text3, text4, id2, image){
   return (text1 != null) & (text2 != null) & (text3 != null) & (text4 != null)
-      & (id1 != null) & (id2 != null) & (image != null);
+      & (id1 != null) & (id2 != null) & (image != null || id1 != 0);
 }

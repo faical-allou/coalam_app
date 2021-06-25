@@ -74,21 +74,21 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                               Padding(
                                 padding: EdgeInsets.only(right: 20.0),
                                 child: CTransText('Chef: \n' +
-                                        snapshot.data!.details!['chefName'])
+                                        snapshot.data!.details!['chefname'])
                                     .textWidget(),
                               ),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: imageFetcher(
                                     '/get_image/' +
-                                        snapshot.data!.details!['chefId']
+                                        snapshot.data!.details!['chefid']
                                             .toString(),
                                     50),
                               )
                             ]),
                       ),
                       CoalamTextCard(
-                        'Name: \n' + snapshot.data!.details!['recipeName'],
+                        'Name: \n' + snapshot.data!.details!['recipename'],
                       ),
                       CoalamTextCard(
                         'Description: \n' +

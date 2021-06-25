@@ -53,6 +53,7 @@ class RecipesListScreen extends StatelessWidget {
                                                           RecipeEditScreen(
                                                               recipe: Recipe(
                                                                   id: 0,
+                                                                  chefName: status.chefName,
                                                                   chefId: status
                                                                       .chefId,
                                                                   name: null,
@@ -128,12 +129,12 @@ class RecipeElement extends StatelessWidget {
         Expanded(
           child: TextButton(
             child:
-                CTransText('View details for ' + recipe.details!['recipeName'])
+                CTransText('View details for ' + recipe.details!['recipename'])
                     .textWidget(),
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                '/details/' + recipe.details!['recipeId'].toString(),
+                '/details/' + recipe.details!['recipeid'].toString(),
               );
             },
           ),

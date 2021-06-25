@@ -12,15 +12,17 @@ class Recipe {
   final int? id;
   final String? name;
   final int? chefId;
+  final String? chefName;
 
-  Recipe({this.details,this.id,this.name,this.chefId});
+  Recipe({this.details,this.id,this.name,this.chefId, this.chefName});
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
       details: json,
       id: json['id'],
-      name: json['recipeName'],
-      chefId: json['chefId'],
+      name: json['recipename'],
+      chefId: json['chefid'],
+      chefName: json['chefname']
     );
   }
 }
@@ -36,11 +38,11 @@ class Chef {
 
   factory Chef.fromJson(Map<String, dynamic> json) {
     return Chef(
-      gId: json['gId'],
+      gId: json['gid'],
       details: json,
-      chefId: json['chefId'],
-      name: json['chefName'],
-      description: json['chefDescription']
+      chefId: json['chefid'],
+      name: json['chefname'],
+      description: json['chefdescription']
     );
   }
 }
@@ -133,6 +135,7 @@ asyncRecipeUpload(
     String ingredients,
     String tools,
     int? chefId,
+    String? chefName,
     String? filepath,
     Uint8List? bytes
     ) async{
@@ -141,13 +144,13 @@ asyncRecipeUpload(
   //request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
   //add text fields
 
-  request.fields["recipeId"] = recipeId.toString();
-  request.fields["recipeName"] = recipeName;
-  request.fields["recipeDescription"] = recipeDescription;
+  request.fields["recipeid"] = recipeId.toString();
+  request.fields["recipename"] = recipeName;
+  request.fields["recipedescription"] = recipeDescription;
   request.fields["ingredients"] = ingredients;
   request.fields["tools"] = tools;
-  request.fields["chefId"] = chefId.toString();
-
+  request.fields["chefid"] = chefId.toString();
+  request.fields["chefname"] = chefName ?? '';
 
   //var pic = await http.MultipartFile.fromPath("image1", filepath);
   var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
@@ -174,10 +177,10 @@ asyncChefAccountUpload(
   //request.headers.addAll({HttpHeaders.authorizationHeader: globals.appKey});
 
   //add text fields
-  request.fields["gId"] = gId;
-  request.fields["chefName"] = chefName;
-  request.fields["chefDescription"] = chefDescription;
-  request.fields["chefId"] = chefId.toString();
+  request.fields["gid"] = gId;
+  request.fields["chefname"] = chefName;
+  request.fields["chefdescription"] = chefDescription;
+  request.fields["chefid"] = chefId.toString();
   if (bytes != null) {
     //create multipart using filepath, string or bytes
     var pic2 = http.MultipartFile.fromBytes(
