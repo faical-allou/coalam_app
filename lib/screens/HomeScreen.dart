@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:coalam_app/models/data.dart';
 import 'package:coalam_app/screens/AccountEditScreen.dart';
+import 'dart:io' show Platform;
 
 class HomeScreen extends StatefulWidget {
   State createState() => new HomeScreenState();

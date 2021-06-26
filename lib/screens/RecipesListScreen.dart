@@ -13,23 +13,24 @@ class RecipesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return FutureBuilder<List<Recipe>>(
-        future: fetchAllRecipes(),
-        builder: (context, AsyncSnapshot<List<Recipe>> snapshot) {
-          if (snapshot.hasData) {
-
-            return Scaffold(
+    return  Scaffold(
                 appBar: AppBar(
                     title: Center(
                         child: CTransText('All the good stuff').textWidget())),
-                body: Align(
+                body: FutureBuilder<List<Recipe>>(
+                    future: fetchAllRecipes(),
+                    builder: (context, AsyncSnapshot<List<Recipe>> snapshot) {
+                    if (snapshot.hasData) {
+                    return Align(
                   child: ListView(
                     children: [
                       for (var i = 0; i <= snapshot.data!.length - 1; i += 1)
-                        RecipeElement(snapshot.data![i], i + 1),
+                        RecipeElement(snapshot.data![i]),
                     ],
                   ),
-                ),
+                );
+                    } else {
+                    return CoalamProgress();}}),
                 bottomNavigationBar: BottomAppBar(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,25 +108,20 @@ class RecipesListScreen extends StatelessWidget {
                         })
                       ]),
                 ));
-          } else {
-            return CoalamProgress();
-          }
-        });
   }
 }
 
 class RecipeElement extends StatelessWidget {
   final Recipe recipe;
-  final int id;
 
-  RecipeElement(this.recipe, this.id);
+  RecipeElement(this.recipe);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child:
           CoalamCard(Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        imageFetcher('/get_image/' + id.toString() + '/1', 100),
+        imageFetcher('/get_image/' + recipe.id.toString() + '/1', 100),
         Expanded(
           child: TextButton(
             child:

@@ -181,7 +181,7 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
                 recipeId, recipeInputName.text, recipeInputDescription.text,
                 recipeInputIngredients.text, recipeInputTools.text,
                 chefId, chefName, imageFilePath,imageBytes );
-              showAlertDialogValidation(context,"Thank you for your submission","Now you're cooking","Continue",);
+              showAlertDialogConfirm(context,"Thank you for your submission","Now you're cooking","Continue",);
           }()
           : showAlertDialogValidation(context,"Oops something is missing","Make sure all fields are filled and attach a picture", "Go back", );
           },
@@ -210,6 +210,9 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
 
 bool isValidRecipe(id1, text1, text2,
 text3, text4, id2, image){
+  print([id1, text1, text2, text3, text4, id2, image]);
+  print([(text1 != null) , (text2 != null) , (text3 != null) , (text4 != null)
+  , (id1 != null) , (id2 != null) ,(image != null || id1 != 0)]);
   return (text1 != null) & (text2 != null) & (text3 != null) & (text4 != null)
       & (id1 != null) & (id2 != null) & (image != null || id1 != 0);
 }

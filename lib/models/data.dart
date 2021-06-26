@@ -19,7 +19,7 @@ class Recipe {
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
       details: json,
-      id: json['id'],
+      id: json['recipeid'],
       name: json['recipename'],
       chefId: json['chefid'],
       chefName: json['chefname']
@@ -50,14 +50,13 @@ class Chef {
 
 
 Future<List<Recipe>> fetchAllRecipes() async {
-  final response = await http.get(Uri.parse(globals.endpoint+'/all'),
-    //headers: {HttpHeaders.authorizationHeader: globals.appKey,},
-  );
-
+  print(globals.endpoint+'/all');
+  final response = await http.get(Uri.parse(globals.endpoint+'/all'));
   if (response.statusCode == 200) {
       Iterable l = jsonDecode(response.body);
       List<Recipe> listRecipes =
       List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
+
       return listRecipes;
   }
   else {
@@ -152,11 +151,14 @@ asyncRecipeUpload(
   request.fields["chefid"] = chefId.toString();
   request.fields["chefname"] = chefName ?? '';
 
-  //var pic = await http.MultipartFile.fromPath("image1", filepath);
-  var pic2 = http.MultipartFile.fromBytes('image1', bytes!, filename:'internalName', contentType: new MediaType('image', 'jpeg') );
-  //add multipart to request
-  request.files.add(pic2);
-
+  if (bytes != null) {
+    //var pic = await http.MultipartFile.fromPath("image1", filepath);
+    var pic2 = http.MultipartFile.fromBytes(
+        'image1', bytes, filename: 'internalName',
+        contentType: new MediaType('image', 'jpeg'));
+    //add multipart to request
+    request.files.add(pic2);
+  }
   var response = await request.send();
 
   //Get the response from the server
