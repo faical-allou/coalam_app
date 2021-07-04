@@ -5,10 +5,12 @@ import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-imageFetcher(String imageLinkToFetch, double h){
+imageFetcher(String imageLinkToFetch, double h, [double? w]){
   return Image.network(
     globals.endpoint + imageLinkToFetch,
     height: h,
+    width: w,
+    fit: BoxFit.cover,
     headers: {'connection': 'Keep-Alive'},
   );
 }

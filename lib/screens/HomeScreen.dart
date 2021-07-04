@@ -68,7 +68,7 @@ class HomeScreenState extends State<HomeScreen> {
             builder: (context, status, child) {
               var status = context.read<GlobalState>();
               return SizedBox(
-                  width: 300, // set this
+                  width: 260, // set this
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,11 +83,21 @@ class HomeScreenState extends State<HomeScreen> {
                             ? ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.green),
-                                child: CTransText("Sign in with Google")
-                                    .textWidget(),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                  Image(
+                                    image: AssetImage('assets/google_logo.png'),
+                                    height: 28,
+                                    width: 28,
+                                  ),
+                                  CTransText("Sign in with Google").textWidget()
+                                ]),
                                 onPressed: () async {
-                                  GoogleSignInAccount? _loggedInUser = await _signInUser();
-                                  Chef _chef = await fetchChef(_loggedInUser!.id, 'google');
+                                  GoogleSignInAccount? _loggedInUser =
+                                      await _signInUser();
+                                  Chef _chef = await fetchChef(
+                                      _loggedInUser!.id, 'google');
                                   status.logIn();
                                   status.setChefId(_chef.chefId!);
                                   status.updateUser(_loggedInUser);
@@ -99,19 +109,21 @@ class HomeScreenState extends State<HomeScreen> {
                                               builder: (context) =>
                                                   AccountEditScreen(
                                                       chefId: _chef.chefId,
-                                                      gId:_loggedInUser.id,
-                                                      name: _loggedInUser.displayName )))
+                                                      gId: _loggedInUser.id,
+                                                      name: _loggedInUser
+                                                          .displayName)))
                                       : Navigator.pushNamed(context, '/list');
                                 })
                             : ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.red),
-                                child: CTransText("Sign out").textWidget(),
+                                child:
+
+                                CTransText("Sign out").textWidget(),
                                 onPressed: () async {
                                   await _handleSignOut();
                                   status.logOut();
                                   status.setChefId(0);
-
                                 },
                               ),
                       ]));

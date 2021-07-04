@@ -31,7 +31,7 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var mainImage =
-        imageFetcher('/get_image/' + widget.id.toString() + '/1', 200);
+        imageFetcher('/get_image/' + widget.id.toString() + '/1', 300, 300);
     return FutureBuilder<Recipe>(
         future: fetchRecipe(widget.id),
         builder: (context, AsyncSnapshot<Recipe> snapshot) {
@@ -55,8 +55,8 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                                         ImageCarousel(int.parse(widget.id!), i)
                                     ],
                                     options: CarouselOptions(
-                                      height: 200,
-                                      viewportFraction: 0.2,
+                                      height: 300,
+                                      viewportFraction: 0.8,
                                       initialPage: 0,
                                       enableInfiniteScroll: false,
                                       reverse: false,
@@ -67,13 +67,14 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                               return CoalamProgress();
                             }
                           }),
+                      CoalamFitTitleTextCard('Chef'),
                       CoalamCard(
                         Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(right: 20.0),
-                                child: CTransText('Chef: \n' +
+                                child: CTransText(
                                         snapshot.data!.details!['chefname'])
                                     .textWidget(),
                               ),
@@ -87,18 +88,20 @@ class RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                               )
                             ]),
                       ),
+                      CoalamFitTitleTextCard('Name'),
                       CoalamTextCard(
-                        'Name: \n' + snapshot.data!.details!['recipename'],
+                        snapshot.data!.details!['recipename'],
                       ),
+                      CoalamFitTitleTextCard('Description'),
                       CoalamTextCard(
-                        'Description: \n' +
                             snapshot.data!.details!['description'],
                       ),
+                      CoalamFitTitleTextCard('Ingredients'),
                       CoalamTextCard(
-                        'You will need the following ingredients: \n' +
                             snapshot.data!.details!['ingredients'],
                       ),
-                      CoalamTextCard('and those tools: \n' +
+                      CoalamFitTitleTextCard('Tools'),
+                      CoalamTextCard(
                           snapshot.data!.details!['tools']),
                       Center(
                         child: Padding(
@@ -300,7 +303,7 @@ class ImageCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var picture =
-        imageFetcher('/get_image/' + id.toString() + '/' + n.toString(), 100);
+        imageFetcher('/get_image/' + id.toString() + '/' + n.toString(), 300,300);
     return picture;
   }
 }

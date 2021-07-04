@@ -32,7 +32,12 @@ class RecipesListScreen extends StatelessWidget {
                     } else {
                     return CoalamProgress();}}),
                 bottomNavigationBar: BottomAppBar(
-                  child: Row(
+                  child:
+                  Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children:[
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Consumer<GlobalState>(
@@ -42,7 +47,7 @@ class RecipesListScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                status.isLoggedIn
+                                ((status.isLoggedIn) & (status.chefId != 0))
                                     ? Column(children: [
                                         IconButton(
                                             icon: Icon(Icons.add_box),
@@ -76,7 +81,7 @@ class RecipesListScreen extends StatelessWidget {
                           return status.isLoggedIn
                               ? Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                       IconButton(
                                           icon: Icon(Icons.account_box),
@@ -92,7 +97,7 @@ class RecipesListScreen extends StatelessWidget {
                                     ])
                               : Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                       IconButton(
                                           icon: Icon(Icons.account_box),
@@ -107,6 +112,8 @@ class RecipesListScreen extends StatelessWidget {
                                     ]);
                         })
                       ]),
+                      Container(height:10.0),
+                      ])
                 ));
   }
 }
@@ -120,8 +127,9 @@ class RecipeElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child:
-          CoalamCard(Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        imageFetcher('/get_image/' + recipe.id.toString() + '/1', 100),
+          CoalamCard(
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              imageFetcher('/get_image/' + recipe.id.toString() + '/1', 100, 100),
         Expanded(
           child: TextButton(
             child:

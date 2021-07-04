@@ -4,25 +4,39 @@ import 'package:flutter/services.dart';
 
 class CoalamTextCard extends StatelessWidget {
   final String text;
-
   CoalamTextCard(this.text);
-
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5, bottom:10),
       child: Padding(padding: EdgeInsets.all(10.0), child: Text(text)),
     );
   }
 }
 
+class CoalamFitTitleTextCard extends StatelessWidget {
+  final String text;
+  CoalamFitTitleTextCard(this.text);
+  @override
+  Widget build(BuildContext context) {
+    return
+      Row(children:[
+      Card(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5),
+      child: Padding(padding: EdgeInsets.all(5.0),
+          child: CTransText(text, TextStyle(fontWeight: FontWeight.bold)).textWidget()),
+    )]);
+  }
+}
+
+
 class CoalamCard extends StatelessWidget {
   final Widget w;
-
   CoalamCard(this.w);
-
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5, bottom:5),
       child: Padding(padding: EdgeInsets.all(10.0), child: this.w),
     );
   }
@@ -81,13 +95,14 @@ class CoalamProgress extends StatelessWidget {
 
 class CTransText {
   final String text;
-  CTransText(this.text);
+  final TextStyle? style;
+  CTransText(this.text, [this.style]);
 
   String value() {
     return this.text;
   }
   Widget textWidget() {
-    return Text(this.text);
+    return Text(this.text, style: style ?? null);
   }
 
 }

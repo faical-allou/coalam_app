@@ -210,5 +210,5 @@ class AccountEditScreenState extends State<AccountEditScreen> {
 
 bool isValidAccount(text1, text2, id) {
   return (text1 != null) & (text1.length > 2) & (text2 != null)  & (text2.length > 2)
-  & (id != null) ;
+  & (id != null);
 }

@@ -209,10 +209,8 @@ class RecipeEditScreenState extends State<RecipeEditScreen> {
 
 
 bool isValidRecipe(id1, text1, text2,
-text3, text4, id2, image){
-  print([id1, text1, text2, text3, text4, id2, image]);
-  print([(text1 != null) , (text2 != null) , (text3 != null) , (text4 != null)
-  , (id1 != null) , (id2 != null) ,(image != null || id1 != 0)]);
+text3, text4, id2, image) {
+
   return (text1 != null) & (text2 != null) & (text3 != null) & (text4 != null)
-      & (id1 != null) & (id2 != null) & (image != null || id1 != 0);
+      & (id1 != null) & (id2 != null);
 }
