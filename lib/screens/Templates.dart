@@ -56,6 +56,7 @@ class CoalamTextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5, bottom:5),
         height: this.height,
         child: TextFormField(
           maxLengthEnforcement:

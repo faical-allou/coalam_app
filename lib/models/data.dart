@@ -56,7 +56,7 @@ Future<List<Recipe>> fetchAllRecipes() async {
       Iterable l = jsonDecode(response.body);
       List<Recipe> listRecipes =
       List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
-
+      print(listRecipes);
       return listRecipes;
   }
   else {

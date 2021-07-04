@@ -17,7 +17,15 @@ class RecipesListScreen extends StatelessWidget {
                 appBar: AppBar(
                     title: Center(
                         child: CTransText('All the good stuff').textWidget())),
-                body: FutureBuilder<List<Recipe>>(
+                body: Container(
+                alignment: Alignment.topCenter,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/wallpaper.png"),
+            fit: BoxFit.cover,
+          ),
+        ),      child:
+                FutureBuilder<List<Recipe>>(
                     future: fetchAllRecipes(),
                     builder: (context, AsyncSnapshot<List<Recipe>> snapshot) {
                     if (snapshot.hasData) {
@@ -30,7 +38,7 @@ class RecipesListScreen extends StatelessWidget {
                   ),
                 );
                     } else {
-                    return CoalamProgress();}}),
+                    return CoalamProgress();}}),),
                 bottomNavigationBar: BottomAppBar(
                   child:
                   Column(
