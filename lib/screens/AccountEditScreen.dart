@@ -167,7 +167,7 @@ class AccountEditScreenState extends State<AccountEditScreen> {
                                     imageFile, imageBytes)
                                 .then((textResponse) => {
                                       status.setChefId(
-                                          jsonDecode(textResponse)['chefId']),
+                                          jsonDecode(textResponse)['chefid']),
                                       status.logIn(),
                                     });
                             showAlertDialogConfirm(context, "Thank you for joining?","Ready to cook?","Continue");
